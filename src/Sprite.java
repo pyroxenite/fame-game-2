@@ -1,28 +1,47 @@
+import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 /**
  * Implements a sprite: an object that holds one or more images and a position.
  * If multiple images are supplied, they are displayed in succession with a 
- * delay determined by the duration attribute.
+ * delay determined by the delta attribute.
  */
 public class Sprite {
-    protected Image[] images;
-    protected double duration;
+    protected ArrayList<ArrayList<Image>> imageSets;
+    protected double delta;
     protected Vector pos = new Vector();
     protected boolean animated = false;
+    protected int currentImageSet = 0;
 
+    /**
+     * Used to initialize a single image Sprite.
+     * @param image The image of the Sprite
+     */
     public Sprite(Image image) {
-        this.images = new Image[1];
-        this.images[0] = image;
-        this.duration = 1.0;
+        this.imageSets = new ArrayList<>();
+        this.imageSets.add(new ArrayList<>());
+        this.imageSets.get(0).add(image);
+        this.delta = 1.0;
     }
 
-    public Sprite(Image[] images, double duration) {
-        this.images = images;
-        this.duration = duration;
+    /**
+     * Used to initialize an animated Sprite with a single image set.
+     * @param images The image set
+     * @param delta The time bewteen each image in the set
+     */
+    public Sprite(ArrayList<Image> images, double delta) {
+        this.imageSets = new ArrayList<>();
+        this.imageSets.add(images);
+        this.delta = delta;
         animated = true;
     }
+
+    // public Sprite(ArrayList<ArrayList<Image>> imageSets, double delta) {
+    //     this.imageSets = imageSets;
+    //     this.delta = delta;
+    //     animated = true;
+    // }
 
     public Vector getPos() { return pos; }
 
@@ -32,12 +51,13 @@ public class Sprite {
     }
 
     public Image getCurrentImage(double time) {
-        int index = (int) ((time % (images.length * duration)) / duration);
-        return images[index];
+        ArrayList<Image> currentImages = imageSets.get(currentImageSet);
+        int index = (int) (time/delta) % (currentImages.size());
+        return currentImages.get(index);
     }
 
     public void draw(GraphicsContext gc, double t, Camera camera) {
-        Image image = images[0];
+        Image image = imageSets.get(0).get(0);
         if (animated)
             image = getCurrentImage(t);
 

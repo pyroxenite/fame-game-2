@@ -70,11 +70,13 @@ class Camera implements Updatable {
     public void update() {
         if (target != null) {
             aimPos = target.getPos().copy();
-            aimPos.setY(Math.min(23, aimPos.getY()));
+            // System.out.println(aimPos);
+            aimPos.setY(Math.min(155-338/scale, aimPos.getY()));
             aimPos.setY(Math.max(-400, aimPos.getY()));
         }
-        pos = pos.copy().scale(1-speed).add(aimPos.copy().scale(speed));
-        scale = scale*(1-speed) + aimScale*speed;
+        double coef = Math.pow(speed, 1/scale);
+        pos = pos.copy().scale(1-coef).add(aimPos.copy().scale(coef));
+        scale = scale*(1-coef) + aimScale*coef;
     }
 
     /**

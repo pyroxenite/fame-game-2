@@ -49,11 +49,11 @@ public class Game extends Application {
         bc.setPos(300, 120);
         sprites.add(bc);
 
-        Image ufoI[] = new Image[6];
-        for (int i = 0; i < 6; i++)
-            ufoI[i] = new Image("images/ufo_" + i + ".png");
+        ArrayList<Image> ufoI = new ArrayList<>();
+        for (int i = 0; i < 4; i++)
+            ufoI.add(new Image("images/adventurer/idle-0" + i + ".png"));
 
-        Sprite ufo = new Sprite(ufoI, 0.1);
+        Sprite ufo = new Sprite(ufoI, 0.2);
         ufo.setPos(0, 0);
         sprites.add(ufo);
 
@@ -65,7 +65,7 @@ public class Game extends Application {
         
         // camera
         Camera camera = new Camera();
-        camera.setScale(2);
+        camera.setScale(5);
         camera.setTarget(ufo);
         camera.setPos(ufo.getPos());
         updatables.add(camera);
