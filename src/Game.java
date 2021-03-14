@@ -65,7 +65,8 @@ public class Game extends Application {
         
         // camera
         Camera camera = new Camera();
-        camera.setScale(5);
+        camera.setScale(2);
+        camera.setSpeed(0.1);
         camera.setTarget(ufo);
         camera.setPos(ufo.getPos());
         updatables.add(camera);
