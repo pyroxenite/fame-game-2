@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Hashtable;
+
 import javafx.application.Application;
 import javafx.animation.*;
 import javafx.stage.*;
@@ -56,18 +58,43 @@ public class Game extends Application {
         // bc.setPos(300, 120);
         // sprites.add(bc);
 
-        ArrayList<Image> idleAdventurer = new ArrayList<>();
+        ArrayList<Image> idle = new ArrayList<>();
         for (int i = 0; i < 4; i++)
-            idleAdventurer.add(new Image("images/adventurer/idle-0" + i + ".png"));
+            idle.add(new Image("images/adventurer/idle-0" + i + ".png"));
 
-        adventurer = new Sprite(idleAdventurer, 0.2);
+        ArrayList<Image> run = new ArrayList<>();
+        for (int i = 0; i < 6; i++)
+            run.add(new Image("images/adventurer/run-0" + i + ".png"));
+
+        ArrayList<Image> jump = new ArrayList<>();
+        for (int i = 0; i < 4; i++)
+            jump.add(new Image("images/adventurer/jump-0" + i + ".png"));
+
+        ArrayList<Image> fall = new ArrayList<>();
+        for (int i = 0; i < 2; i++)
+            fall.add(new Image("images/adventurer/fall-0" + i + ".png"));
+
+        Hashtable<String, ArrayList<Image>> adventurerAnims = new Hashtable<String, ArrayList<Image>>();
+        adventurerAnims.put("idle", idle);
+        adventurerAnims.put("run", run);
+        adventurerAnims.put("jump", jump);
+        adventurerAnims.put("fall", fall);
+
+        Hashtable<String, Double> adventurerAnimsDeltas = new Hashtable<String, Double>();
+        adventurerAnimsDeltas.put("idle", .2);
+        adventurerAnimsDeltas.put("run", .1);
+        adventurerAnimsDeltas.put("jump", .1);
+        adventurerAnimsDeltas.put("fall", .2);
+
+
+        adventurer = new Sprite(adventurerAnims, adventurerAnimsDeltas, "idle");
         adventurer.setPos(400, 115);
         sprites.add(adventurer);
 
         // controls
         PlayerController playerController = new PlayerController(this, keyHandler);
         playerController.setTarget(adventurer);
-        playerController.setActiveSpeed(1.5);
+        playerController.setActiveSpeed(0.75);
         playerController.setFriction(0.5);
         updatables.add(playerController);
         

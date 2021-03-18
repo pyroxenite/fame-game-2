@@ -5,7 +5,7 @@ public class PlayerController implements Updatable {
     private Game game;
     private Sprite target;
     private Vector vel = new Vector();
-    private double activeSpeed = 2;
+    private double activeSpeed = 1;
     private double friction = 0;
     private KeyHandler keyHandler;
 
@@ -40,7 +40,7 @@ public class PlayerController implements Updatable {
         
         if (keyHandler.isPressed("UP") || keyHandler.isPressed("W")) {
             if (Math.abs(vel.getY()) < 0.1) {
-                vel.add(new Vector(0, -3)); 
+                vel.add(new Vector(0, -4)); 
             }
             keyHandler.preventRepeat("UP");
         }
@@ -53,7 +53,21 @@ public class PlayerController implements Updatable {
         target.getPos().add(vel);
         vel.scaleX(1 - friction);
 
-        vel.add(new Vector(0, 0.2));
+        vel.add(new Vector(0, 0.1));
+
+        if (Math.abs(vel.getX()) > .1) {
+            target.setImageSet("run");
+        } else {
+            target.setImageSet("idle");
+        }
+        // System.out.println(vel.getY());
+        if (Math.abs(vel.getY()) > 1) {
+            if (vel.getY() < 0) {
+                target.setImageSet("jump");
+            } else if (vel.getY() > 0) {
+                target.setImageSet("fall");
+            }
+        }
 
         if (target.getPos().getY() > 115) {
             target.getPos().setY(115);
