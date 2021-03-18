@@ -32,25 +32,26 @@ public class Sprite {
      * @param images The image set
      * @param delta The time bewteen each image in the set
      */
-    // public Sprite(ArrayList<Image> images, double delta) {
-    //     this.imageSets = new ArrayList<>();
-    //     this.imageSets.add(images);
-    //     this.delta = delta;
-    //     animated = true;
-    // }
+    public Sprite(ArrayList<Image> images, double delta) {
+        this.imageSets = new Hashtable<>();
+        this.imageSets.put("idle", images);
+        this.deltas = new Hashtable<>();
+        this.deltas.put("idle", delta);
+        animated = true;
+    }
 
-    public Sprite(Hashtable<String, ArrayList<Image>> imageSet, Hashtable<String, Double> animDeltas, String initSet) {
-        this.imageSets = imageSet;
+    /**
+     * Used to initialize an animated Sprite with multiple image sets.
+     * @param imageSets The image sets hashtable
+     * @param animDeltas The time bewteen each image in each set
+     * @param initSet The initial set
+     */
+    public Sprite(Hashtable<String, ArrayList<Image>> imageSets, Hashtable<String, Double> animDeltas, String initSet) {
+        this.imageSets = imageSets;
         this.deltas = animDeltas;
         this.currentImageSet = initSet;
         animated = true;
     }
-
-    // public Sprite(ArrayList<ArrayList<Image>> imageSets, double delta) {
-    //     this.imageSets = imageSets;
-    //     this.delta = delta;
-    //     animated = true;
-    // }
 
     public Vector getPos() { return pos; }
 
