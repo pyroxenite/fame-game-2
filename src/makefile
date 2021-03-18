@@ -6,7 +6,7 @@ endif
 
 all: Game.class
 
-Game.class: Game.java Camera.java Sprite.class LayeredSprite.class Vector.class Updatable.class PlayerController.class
+Game.class: Game.java Camera.class Sprite.class LayeredSprite.class Vector.class Updatable.class GameController.class PlayerController.class KeyHandler.class
 	javac $(modules) Game.java
 
 Sprite.class: Sprite.java Vector.class
@@ -15,17 +15,26 @@ Sprite.class: Sprite.java Vector.class
 LayeredSprite.class: LayeredSprite.java Vector.class
 	javac $(modules) LayeredSprite.java
 
-Camera.class: Camera.java Vector.class Updatable.class
+Camera.class: Camera.java Vector.class Updatable.class Spring.class
 	javac $(modules) Camera.java
 
-PlayerController.class: PlayerController.java Sprite.class Vector.class Updatable.class
+GameController.class: GameController.java KeyHandler.class Updatable.class
+	javac $(modules) GameController.java
+
+PlayerController.class: PlayerController.java KeyHandler.class Sprite.class Vector.class Updatable.class
 	javac $(modules) PlayerController.java
+
+KeyHandler.class: KeyHandler.java
+	javac $(modules) KeyHandler.java
 
 Vector.class: Vector.java
 	javac $(modules) Vector.java
 
 Updatable.class: Updatable.java
 	javac Updatable.java
+
+Spring.class: Spring.java
+	javac Spring.java
 
 clean:
 	rm *.class

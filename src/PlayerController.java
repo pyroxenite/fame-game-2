@@ -2,25 +2,16 @@ import java.util.ArrayList;
 import javafx.scene.Scene;
 
 public class PlayerController implements Updatable {
-    private ArrayList<String> input = new ArrayList<>();
+    private Game game;
     private Sprite target;
     private Vector vel = new Vector();
     private double activeSpeed = 2;
     private double friction = 0;
+    private KeyHandler keyHandler;
 
-    public PlayerController(Scene scene, Sprite target) {
-        this.target = target;
-
-        scene.setOnKeyPressed(e -> {
-            String code = e.getCode().toString();
-            if (!input.contains(code))
-                input.add(code);
-        });
-
-        scene.setOnKeyReleased(e -> {
-            String code = e.getCode().toString();
-            input.remove(code);
-        });
+    public PlayerController(Game game, KeyHandler keyHandler) {
+        this.game = game;
+        this.keyHandler = keyHandler;
     }
 
     public Sprite getTarget() { return target; }
@@ -37,19 +28,36 @@ public class PlayerController implements Updatable {
     public void setFriction(double friction) { this.friction = friction; }
 
     public void update() {
-        if (input.contains("RIGHT"))
+        if (keyHandler.isPressed("RIGHT") || keyHandler.isPressed("D")) {
             vel.add(new Vector(activeSpeed, 0));
+            target.setFlipped(false);
+        }
 
-        if (input.contains("LEFT"))
+        if (keyHandler.isPressed("LEFT") || keyHandler.isPressed("A")) {
             vel.add(new Vector(-activeSpeed, 0));
-
-        if (input.contains("DOWN"))
-            vel.add(new Vector(0, activeSpeed));
-
-        if (input.contains("UP"))
-            vel.add(new Vector(0, -activeSpeed));
+            target.setFlipped(true);
+        }
+        
+        if (keyHandler.isPressed("UP") || keyHandler.isPressed("W")) {
+            if (Math.abs(vel.getY()) < 0.1) {
+                vel.add(new Vector(0, -3)); 
+            }
+            keyHandler.preventRepeat("UP");
+        }
+        
+        // if (keyHandler.isPressed("DOWN") || keyHandler.isPressed("S")) {
+        //     vel.add(new Vector(0, activeSpeed));
+        //     keyHandler.preventRepeat("DOWN");
+        // }
 
         target.getPos().add(vel);
-        vel.scale(1 - friction);
+        vel.scaleX(1 - friction);
+
+        vel.add(new Vector(0, 0.2));
+
+        if (target.getPos().getY() > 115) {
+            target.getPos().setY(115);
+            vel.setY(0);
+        }
     }
 }

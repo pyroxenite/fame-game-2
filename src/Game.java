@@ -1,19 +1,22 @@
+import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.animation.*;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.canvas.*;
 import javafx.scene.image.*;
 
-import java.util.ArrayList;
-import javafx.animation.*;
-
 public class Game extends Application {
     Group root = new Group();
     Scene scene = new Scene(root);
     Canvas canvas;
+    Camera camera = new Camera();
+    KeyHandler keyHandler = new KeyHandler(scene);
 
     ArrayList<Sprite> sprites = new ArrayList<>();
     ArrayList<Updatable> updatables = new ArrayList<>();
+
+    Sprite adventurer;
 
     public void start(Stage stage) {
         stage.setTitle("Game");
@@ -26,6 +29,10 @@ public class Game extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         
         gc.setImageSmoothing(false); // stops pixel-art from bluring
+
+        // game controler
+        GameController gameController = new GameController(this);
+        updatables.add(gameController);
 
         // background
         ArrayList<Image> bgLayers = new ArrayList<>();
@@ -45,35 +52,35 @@ public class Game extends Application {
         foreground.setDepth(-1);
 
         // sprites
-        Sprite bc = new Sprite(new Image("images/briefcase.png"));
-        bc.setPos(300, 120);
-        sprites.add(bc);
+        // Sprite bc = new Sprite(new Image("images/briefcase.png"));
+        // bc.setPos(300, 120);
+        // sprites.add(bc);
 
-        ArrayList<Image> ufoI = new ArrayList<>();
+        ArrayList<Image> idleAdventurer = new ArrayList<>();
         for (int i = 0; i < 4; i++)
-            ufoI.add(new Image("images/adventurer/idle-0" + i + ".png"));
+            idleAdventurer.add(new Image("images/adventurer/idle-0" + i + ".png"));
 
-        Sprite ufo = new Sprite(ufoI, 0.2);
-        ufo.setPos(0, 0);
-        sprites.add(ufo);
+        adventurer = new Sprite(idleAdventurer, 0.2);
+        adventurer.setPos(400, 115);
+        sprites.add(adventurer);
 
         // controls
-        PlayerController ufoController = new PlayerController(scene, ufo);
-        ufoController.setActiveSpeed(0.5);
-        ufoController.setFriction(0.1);
-        updatables.add(ufoController);
+        PlayerController playerController = new PlayerController(this, keyHandler);
+        playerController.setTarget(adventurer);
+        playerController.setActiveSpeed(1.5);
+        playerController.setFriction(0.5);
+        updatables.add(playerController);
         
         // camera
-        Camera camera = new Camera();
-        camera.setScale(2);
-        camera.setSpeed(0.1);
-        camera.setTarget(ufo);
-        camera.setPos(ufo.getPos());
+        camera.setScale(3);
+        camera.setSpeed(0.05);
+        camera.setTarget(adventurer);
+        camera.setPos(adventurer.getPos());
         updatables.add(camera);
 
         final long startNanoTime = System.nanoTime();
 
-        // gameloop
+        // GAMELOOP
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 double t = (currentNanoTime - startNanoTime) / 1e9;
@@ -103,4 +110,7 @@ public class Game extends Application {
         gc.setTransform(1, 0, 0, 1, 0, 0);
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
+
+    public Camera getCamera() { return camera; }
+    public KeyHandler getKeyHandler() { return keyHandler; }
 }

@@ -21,10 +21,13 @@ class Camera implements Updatable {
     private Vector pos = new Vector();
     /** Instantly sets position. */
     public void setPos(Vector pos) { 
-        this.pos = pos;
-        this.aimPos = pos;
+        this.pos = pos.copy();
+        this.aimPos = pos.copy();
     }
-    public void setPos(double x, double y) { this.pos = new Vector(x, y); }
+    public void setPos(double x, double y) { 
+        pos = new Vector(x, y); 
+        aimPos = pos.copy();
+    }
     public Vector getPos() { return pos; }
 
     /** The true zoom level of the camera. */
@@ -63,6 +66,14 @@ class Camera implements Updatable {
     public Sprite getTarget() { return target; }
     public void setTarget(Sprite target) { this.target = target; }
 
+    /** Springs used to shake camera. */
+    private Spring springX = new Spring();
+    private Spring springY = new Spring();
+
+    public double getX() {
+        return pos.getX() + springX.getPos() * 5;
+    }
+
     /** 
      * To be called at each animation frame. Updates the real values to approach
      * the aim values and follows target if defined.
@@ -70,13 +81,14 @@ class Camera implements Updatable {
     public void update() {
         if (target != null) {
             aimPos = target.getPos().copy();
-            System.out.println(aimPos);
             aimPos.setY(Math.min(155-338/scale, aimPos.getY()));
             aimPos.setY(Math.max(-580+338/scale, aimPos.getY()));
         }
         double coef = 1 - Math.pow((1-speed), scale);
         pos = pos.copy().scale(1-coef).add(aimPos.copy().scale(coef));
         scale = scale*(1-coef) + aimScale*coef;
+        springX.update();
+        springY.update();
     }
 
     /**
@@ -88,7 +100,19 @@ class Camera implements Updatable {
         double width = gc.getCanvas().getWidth();
         gc.transform(new Affine(Transform.translate(width/2, height/2)));
         // gc.transform(new Affine(Transform.rotate(angle, 0, 0)));
-        gc.transform(new Affine(Transform.translate(-pos.getX()*scale, -pos.getY()*scale)));
         gc.transform(new Affine(Transform.scale(scale, scale)));
+        gc.transform(new Affine(Transform.translate(-pos.getX() + springX.getPos(), -pos.getY() + springY.getPos())));
+    }
+
+    public void hitLeft(double intensity) {
+        springX.setParameters(3, 0.2, intensity);
+        springY.setParameters(1.3*3, 0.2, intensity);
+        pos.setX(pos.getX()+10);
+    }
+
+    public void hitRight(double intensity) {
+        springX.setParameters(3, 0.2, intensity);
+        springY.setParameters(1.3*3, 0.2, intensity);
+        pos.setX(pos.getX()-10);
     }
 }

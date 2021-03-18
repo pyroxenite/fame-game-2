@@ -8,11 +8,12 @@ import javafx.scene.image.Image;
  * delay determined by the delta attribute.
  */
 public class Sprite {
-    protected ArrayList<ArrayList<Image>> imageSets;
-    protected double delta;
-    protected Vector pos = new Vector();
-    protected boolean animated = false;
-    protected int currentImageSet = 0;
+    private ArrayList<ArrayList<Image>> imageSets;
+    private double delta;
+    private Vector pos = new Vector();
+    private boolean animated = false;
+    private int currentImageSet = 0;
+    private boolean verticalFilp = false;
 
     /**
      * Used to initialize a single image Sprite.
@@ -50,9 +51,11 @@ public class Sprite {
         pos.setY(y);
     }
 
+    public void setFlipped(boolean verticalFilp) { this.verticalFilp = verticalFilp; } 
+
     public Image getCurrentImage(double time) {
         ArrayList<Image> currentImages = imageSets.get(currentImageSet);
-        int index = (int) (time/delta) % (currentImages.size());
+        int index = (int) (time/delta) % currentImages.size();
         return currentImages.get(index);
     }
 
@@ -61,10 +64,22 @@ public class Sprite {
         if (animated)
             image = getCurrentImage(t);
 
-        gc.drawImage(
-            image, 
-            pos.getX() - image.getWidth()/2, 
-            pos.getY() - image.getHeight()/2
-        );
+        if (verticalFilp) {
+            gc.drawImage(
+                image, 
+                pos.getX() - image.getWidth()/2 + image.getWidth(), 
+                pos.getY() - image.getHeight()/2,
+                -image.getWidth(),
+                image.getHeight()
+            );
+        } else {
+            gc.drawImage(
+                image, 
+                pos.getX() - image.getWidth()/2, 
+                pos.getY() - image.getHeight()/2,
+                image.getWidth(),
+                image.getHeight()
+            );
+        }
     }
 }

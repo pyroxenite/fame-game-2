@@ -25,8 +25,8 @@ class LayeredSprite {
         double width = layers.get(0).getWidth();
         double viewWidth = gc.getCanvas().getWidth();
         for (int i=layers.size()-1; i>=0; i--) {
-            double x = pos.getX() + camera.getPos().getX()*(i+depth)/12;
-            int shift = (int) ((camera.getPos().getX() + viewWidth/2 - x) / width);
+            double x = pos.getX() + camera.getX()*(i+depth)/12;
+            int shift = (int) ((camera.getX() + viewWidth/2 - x) / width);
 
             // gc.drawImage(
             //     layers.get(i), 
