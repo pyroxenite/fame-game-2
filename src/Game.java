@@ -67,7 +67,7 @@ public class Game extends Application {
             run.add(new Image("images/adventurer/run-0" + i + ".png"));
 
         ArrayList<Image> jump = new ArrayList<>();
-        for (int i = 0; i < 4; i++)
+        for (int i = 2; i < 3; i++) // using only one image to prevent ugly looping for now
             jump.add(new Image("images/adventurer/jump-0" + i + ".png"));
 
         ArrayList<Image> fall = new ArrayList<>();
@@ -82,7 +82,7 @@ public class Game extends Application {
 
         Hashtable<String, Double> adventurerAnimsDeltas = new Hashtable<String, Double>();
         adventurerAnimsDeltas.put("idle", .2);
-        adventurerAnimsDeltas.put("run", .1);
+        adventurerAnimsDeltas.put("run", .08);
         adventurerAnimsDeltas.put("jump", .1);
         adventurerAnimsDeltas.put("fall", .2);
 

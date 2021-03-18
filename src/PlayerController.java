@@ -60,11 +60,11 @@ public class PlayerController implements Updatable {
         } else {
             target.setImageSet("idle");
         }
-        // System.out.println(vel.getY());
-        if (Math.abs(vel.getY()) > 1) {
+        //System.out.println(vel.getY());
+        if (Math.abs(vel.getY()) > 0.2) {
             if (vel.getY() < 0) {
                 target.setImageSet("jump");
-            } else if (vel.getY() > 0) {
+            } else {
                 target.setImageSet("fall");
             }
         }
