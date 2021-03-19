@@ -96,9 +96,6 @@ class Camera implements Updatable {
      * @param gc The GraphicsContext object.
      */
     public void applyTransform(GraphicsContext gc) {
-        double height = gc.getCanvas().getHeight();
-        double width = gc.getCanvas().getWidth();
-        gc.transform(new Affine(Transform.translate(width/2, height/2)));
         // gc.transform(new Affine(Transform.rotate(angle, 0, 0)));
         gc.transform(new Affine(Transform.scale(scale, scale)));
         gc.transform(new Affine(Transform.translate(-pos.getX() + springX.getPos(), -pos.getY() + springY.getPos())));

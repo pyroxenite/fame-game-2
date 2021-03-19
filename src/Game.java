@@ -7,9 +7,13 @@ import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.canvas.*;
 import javafx.scene.image.*;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Transform;
 
 public class Game extends Application {
-    Group root = new Group();
+    StackPane root = new StackPane();
     Scene scene = new Scene(root);
     Canvas canvas;
     Camera camera = new Camera();
@@ -20,13 +24,19 @@ public class Game extends Application {
 
     Sprite adventurer;
 
+    @Override
     public void start(Stage stage) {
         stage.setTitle("Game");
         stage.setScene(scene);
 
-        int width = 1200;
-        canvas = new Canvas(width, width/16*9);
+        canvas = new Canvas();
+
         root.getChildren().add(canvas);
+ 
+        // Bind canvas size to stack pane size.
+        canvas.widthProperty().bind(root.widthProperty());
+        canvas.heightProperty().bind(root.heightProperty());
+
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         
@@ -86,7 +96,6 @@ public class Game extends Application {
         adventurerAnimsDeltas.put("jump", .1);
         adventurerAnimsDeltas.put("fall", .2);
 
-
         adventurer = new Sprite(adventurerAnims, adventurerAnimsDeltas, "idle");
         adventurer.setPos(400, 115);
         sprites.add(adventurer);
@@ -95,6 +104,7 @@ public class Game extends Application {
         PlayerController playerController = new PlayerController(this, keyHandler);
         playerController.setTarget(adventurer);
         playerController.setActiveSpeed(0.75);
+        // playerController.setActiveSpeed(5);
         playerController.setFriction(0.5);
         updatables.add(playerController);
         
@@ -113,6 +123,7 @@ public class Game extends Application {
                 double t = (currentNanoTime - startNanoTime) / 1e9;
                 clear();
 
+                adjustCanvasToWindowSize(gc);
                 camera.applyTransform(gc);
 
                 // update all there is to update
@@ -126,6 +137,8 @@ public class Game extends Application {
                     s.draw(gc, t, camera);
 
                 foreground.draw(gc, t, camera);
+
+                drawBlackRects(gc);
             }
         }.start();
 
@@ -136,6 +149,28 @@ public class Game extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setTransform(1, 0, 0, 1, 0, 0);
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    }
+
+    private void adjustCanvasToWindowSize(GraphicsContext gc) {
+        double width = gc.getCanvas().getWidth();
+        double height = gc.getCanvas().getHeight();
+        double scale = Math.min(width/1200, height/675);
+        gc.transform(new Affine(Transform.translate(width/2, height/2)));
+        gc.transform(new Affine(Transform.scale(scale, scale)));
+    }
+
+    private void drawBlackRects(GraphicsContext gc) {
+        gc.setTransform(1, 0, 0, 1, 0, 0);
+        double width = gc.getCanvas().getWidth();
+        double height = gc.getCanvas().getHeight();
+        gc.setFill(Color.BLACK);
+        if (width/1200 < height/675) {
+            gc.fillRect(0, 0, width, (height-width/16*9)/2);
+            gc.fillRect(0, height-(height-width/16*9)/2, width, (height-width/16*9)/2);
+        } else {
+            gc.fillRect(0, 0, (width-height/9*16)/2, height);
+            gc.fillRect(width-(width-height/9*16)/2, 0, (width-height/9*16)/2, height);
+        }
     }
 
     public Camera getCamera() { return camera; }

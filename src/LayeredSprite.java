@@ -23,16 +23,17 @@ class LayeredSprite {
 
     public void draw(GraphicsContext gc, double t, Camera camera) {
         double width = layers.get(0).getWidth();
-        double viewWidth = gc.getCanvas().getWidth();
+        double viewWidth = 1200;
         for (int i=layers.size()-1; i>=0; i--) {
             double x = pos.getX() + camera.getX()*(i+depth)/12;
             int shift = (int) ((camera.getX() + viewWidth/2 - x) / width);
 
-            // gc.drawImage(
-            //     layers.get(i), 
-            //     x + width*(shift - 2), 
-            //     pos.getY()
-            // );
+            if (camera.getX() < 0) 
+                gc.drawImage(
+                    layers.get(i), 
+                    x + width*(shift - 2), 
+                    pos.getY()
+                );
 
             gc.drawImage(
                 layers.get(i), 
