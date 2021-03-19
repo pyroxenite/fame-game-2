@@ -11,7 +11,7 @@ public class GameController implements Updatable {
 
     public void update() {
         if (keyHandler.isPressed("H")) {
-            game.getCamera().hitLeft(50);
+            game.getCamera().hitGround(40);
             keyHandler.preventRepeat("H");
         }
         if (keyHandler.isPressed("L")) {

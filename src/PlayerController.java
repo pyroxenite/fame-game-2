@@ -71,6 +71,8 @@ public class PlayerController implements Updatable {
 
         if (target.getPos().getY() > 115) {
             target.getPos().setY(115);
+            if (vel.getY() > 1)
+                game.camera.hitGround(vel.getY()*5);
             vel.setY(0);
         }
     }
