@@ -78,6 +78,12 @@ public class Vector {
         return this;
     }
 
+    public Vector add(double x, double y) {
+        this.x += x;
+        this.y += y;
+        return this;
+    }
+
     /** 
      * Subtracts a Vector.
      * @param other The other vector.
@@ -87,6 +93,13 @@ public class Vector {
         y -= other.y;
         return this;
     }
+
+    public Vector sub(double x, double y) {
+        this.x -= x;
+        this.y -= y;
+        return this;
+    }
+
 
     /** 
      * Scales a Vector.

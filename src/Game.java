@@ -46,9 +46,26 @@ public class Game extends Application {
         GameController gameController = new GameController(this);
         updatables.add(gameController);
 
+        // // background
+        // ArrayList<Image> bgLayers = new ArrayList<>();
+        // for (int i=1; i<=5; i++)
+        //     bgLayers.add(new Image("images/bglayers2/layer" + i + ".png"));
+
+        // LayeredSprite background = new LayeredSprite(bgLayers);
+        // background.setPos(0, -110);    
+
+        // // foreground
+        // ArrayList<Image> fgLayers = new ArrayList<>();
+        // for (int i=0; i<1; i++)
+        //     fgLayers.add(new Image("images/bglayers2/layer" + i + ".png"));
+
+        // LayeredSprite foreground = new LayeredSprite(fgLayers);
+        // foreground.setPos(0, -110);
+        // foreground.setDepth(-1);
+
         // background
         ArrayList<Image> bgLayers = new ArrayList<>();
-        for (int i=1; i<11; i++)
+        for (int i=1; i<=10; i++)
             bgLayers.add(new Image("images/bglayers/layer" + i + ".png"));
 
         LayeredSprite background = new LayeredSprite(bgLayers);
@@ -62,11 +79,6 @@ public class Game extends Application {
         LayeredSprite foreground = new LayeredSprite(fgLayers);
         foreground.setPos(0, -600);
         foreground.setDepth(-1);
-
-        // sprites
-        // Sprite bc = new Sprite(new Image("images/briefcase.png"));
-        // bc.setPos(300, 120);
-        // sprites.add(bc);
 
         ArrayList<Image> idle = new ArrayList<>();
         for (int i = 0; i < 4; i++)
@@ -84,28 +96,28 @@ public class Game extends Application {
         for (int i = 0; i < 2; i++)
             fall.add(new Image("images/adventurer/fall-0" + i + ".png"));
 
-        Hashtable<String, ArrayList<Image>> adventurerAnims = new Hashtable<String, ArrayList<Image>>();
+        Hashtable<String, ArrayList<Image>> adventurerAnims = new Hashtable<>();
         adventurerAnims.put("idle", idle);
         adventurerAnims.put("run", run);
         adventurerAnims.put("jump", jump);
         adventurerAnims.put("fall", fall);
 
-        Hashtable<String, Double> adventurerAnimsDeltas = new Hashtable<String, Double>();
+        Hashtable<String, Double> adventurerAnimsDeltas = new Hashtable<>();
         adventurerAnimsDeltas.put("idle", .2);
         adventurerAnimsDeltas.put("run", .08);
         adventurerAnimsDeltas.put("jump", .1);
         adventurerAnimsDeltas.put("fall", .2);
 
         adventurer = new Sprite(adventurerAnims, adventurerAnimsDeltas, "idle");
-        adventurer.setPos(400, 115);
+        adventurer.setPos(0, 115);
         sprites.add(adventurer);
 
         // controls
         PlayerController playerController = new PlayerController(this, keyHandler);
         playerController.setTarget(adventurer);
-        playerController.setActiveSpeed(0.75);
-        // playerController.setActiveSpeed(5);
-        playerController.setFriction(0.5);
+        playerController.setActiveSpeed(0.8);
+        playerController.setFriction(0.3);
+        // playerController.setFriction(0.05);
         updatables.add(playerController);
         
         // camera
@@ -154,9 +166,9 @@ public class Game extends Application {
     private void adjustCanvasToWindowSize(GraphicsContext gc) {
         double width = gc.getCanvas().getWidth();
         double height = gc.getCanvas().getHeight();
+        gc.transform(new Affine(Transform.translate(width/2, height/2))); // center origin
         double scale = Math.min(width/1200, height/675);
-        gc.transform(new Affine(Transform.translate(width/2, height/2)));
-        gc.transform(new Affine(Transform.scale(scale, scale)));
+        gc.transform(new Affine(Transform.scale(scale, scale))); // scale according to window size
     }
 
     private void drawBlackRects(GraphicsContext gc) {
