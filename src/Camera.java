@@ -12,7 +12,7 @@ import javafx.scene.transform.Transform;
  * To instantly configure the camera's position and zoom amount, the same methods with
  * 'Aim' ommited bypass the glidding effect.
  * 
- * Alternatively, the camera can follow a specified target Sprite. This is can be set
+ * Alternatively, the camera can follow a specified Sprite target. This is can be set
  * with the `void setTarget(Sprite target)` method. The update method still needs to 
  * be called at each frame.
  */
@@ -81,8 +81,8 @@ class Camera implements Updatable {
     public void update() {
         if (target != null) {
             aimPos = target.getPos().copy();
-            aimPos.setY(Math.min(155-338/scale, aimPos.getY()));
-            aimPos.setY(Math.max(-580+338/scale, aimPos.getY()));
+            aimPos.setY(Math.min(155-338/scale, aimPos.getY())); // camera upper bound
+            aimPos.setY(Math.max(-580+338/scale, aimPos.getY())); // camera lower bound
         }
         double coef = 1 - Math.pow((1-speed), scale);
         pos = pos.copy().scale(1-coef).add(aimPos.copy().scale(coef));
