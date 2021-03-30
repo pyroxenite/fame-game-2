@@ -112,6 +112,21 @@ public class Game extends Application {
         adventurer.setPos(0, 115);
         sprites.add(adventurer);
 
+
+        //skeleton test
+        ArrayList<Image> skeletonIdle = new ArrayList<>();
+        for (int i = 0; i < 4; i++)
+            skeletonIdle.add(new Image("images/mobs/skeleton/idle/tile00" + i + ".png"));
+        Hashtable<String, ArrayList<Image>> skeletonAnims = new Hashtable<>();
+        Hashtable<String, Double> skeletonDeltas = new Hashtable<>();
+        skeletonAnims.put("idle", idle);
+        skeletonDeltas.put("idle", .2);
+        Sprite skeletonSprite = new Sprite(skeletonAnims, skeletonDeltas, "idle");
+        Mob skeleton = new Mob(true, 50, skeletonSprite);
+        skeletonSprite.setPos(0, 115);
+        updatables.add(skeleton);
+        //end skeleton
+
         // controls
         PlayerController playerController = new PlayerController(this, keyHandler);
         playerController.setTarget(adventurer);
