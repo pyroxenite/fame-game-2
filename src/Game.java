@@ -23,6 +23,7 @@ public class Game extends Application {
     ArrayList<Updatable> updatables = new ArrayList<>();
 
     Sprite adventurer;
+    Sprite skeletonSprite;
 
     @Override
     public void start(Stage stage) {
@@ -46,6 +47,10 @@ public class Game extends Application {
         GameController gameController = new GameController(this);
         updatables.add(gameController);
 
+        //bg sound
+        SoundBackground bgSound = new SoundBackground();
+        bgSound.run();
+        
         // // background
         // ArrayList<Image> bgLayers = new ArrayList<>();
         // for (int i=1; i<=5; i++)
@@ -117,14 +122,23 @@ public class Game extends Application {
         ArrayList<Image> skeletonIdle = new ArrayList<>();
         for (int i = 0; i < 4; i++)
             skeletonIdle.add(new Image("images/mobs/skeleton/idle/tile00" + i + ".png"));
+        ArrayList<Image> skeletonWalk = new ArrayList<>();
+        for (int i = 0; i < 13; i++) {
+            String index = "" + i;
+            if (i < 10) index = "0" + index;
+            skeletonWalk.add(new Image("images/mobs/skeleton/walk/tile0" + index + ".png"));
+        }
         Hashtable<String, ArrayList<Image>> skeletonAnims = new Hashtable<>();
         Hashtable<String, Double> skeletonDeltas = new Hashtable<>();
-        skeletonAnims.put("idle", idle);
+        skeletonAnims.put("idle", skeletonIdle);
+        skeletonAnims.put("walk", skeletonWalk);
         skeletonDeltas.put("idle", .2);
-        Sprite skeletonSprite = new Sprite(skeletonAnims, skeletonDeltas, "idle");
-        Mob skeleton = new Mob(true, 50, skeletonSprite);
+        skeletonDeltas.put("walk", .05);
+        skeletonSprite = new Sprite(skeletonAnims, skeletonDeltas, "walk");
+        Mob skeleton = new Mob(true, 50, skeletonSprite, adventurer);
         skeletonSprite.setPos(0, 115);
         updatables.add(skeleton);
+        sprites.add(skeletonSprite);
         //end skeleton
 
         // controls
