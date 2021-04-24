@@ -1,9 +1,7 @@
 import java.util.*;
 import java.util.Random;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
 
-public class Mob implements Updatable {
+public class MobController implements Updatable {
 
     private Sprite target;
     private Sprite adventurer;
@@ -12,7 +10,7 @@ public class Mob implements Updatable {
     private Boolean hostile;
     private int maxHealth;
     private int currentHealth;
-    private double moveSpeed = .2;
+    private double moveSpeed = 0.6;
     private double friction = 0;
     private static double detectionRange = 150;
     private static double attackRange = 25;
@@ -20,53 +18,53 @@ public class Mob implements Updatable {
     private Random rand = new Random();
     private int targX = 0;
 
-    //FSM state and transition implementation
-    public enum BehaviorState {
-        Patrol {
-            @Override
-            public BehaviorState nextState(Vector charPos, Vector mobPos) { 
-                double dist = Math.abs(charPos.getX() - mobPos.getX());
-                if (dist < detectionRange)
-                    return BehaviorState.Chase;
-                else 
-                    return BehaviorState.Patrol;
-            }
-        },
-        Chase {
-            @Override
-            public BehaviorState nextState(Vector charPos, Vector mobPos) { 
-                double dist = Math.abs(charPos.getX() - mobPos.getX());
-                if (dist < attackRange)
-                    return BehaviorState.Attack;
-                else if (dist > detectionRange)
-                    return BehaviorState.Patrol;
-                else
-                    return BehaviorState.Chase;
-            }
-        },
-        Attack {
-            @Override
-            public BehaviorState nextState(Vector charPos, Vector mobPos) { 
-                double dist = Math.abs(charPos.getX() - mobPos.getX());
-                if (dist < attackRange)
-                    return BehaviorState.Attack;
-                else
-                    return BehaviorState.Chase;
-            }
-        };
-
-        public abstract BehaviorState nextState(Vector charPos, Vector mobPos);
-    }
-
-    private BehaviorState currBehaviorState = BehaviorState.Patrol;
-
-    public Mob(Boolean hostile, int maxHealth, Sprite sprite, Sprite adventurer) {
+    public MobController(Boolean hostile, int maxHealth, Sprite sprite, Sprite adventurer) {
         this.hostile = hostile;
         this.maxHealth = maxHealth;
         this.currentHealth = maxHealth;
         this.target = sprite;
         this.adventurer = adventurer;
     }
+
+    //FSM state and transition implementation
+    public enum BehaviorState {
+        PATROL {
+            @Override
+            public BehaviorState nextState(Vector charPos, Vector mobPos) { 
+                double dist = Math.abs(charPos.getX() - mobPos.getX());
+                if (dist < detectionRange)
+                    return BehaviorState.CHASE;
+                else 
+                    return BehaviorState.PATROL;
+            }
+        },
+        CHASE {
+            @Override
+            public BehaviorState nextState(Vector charPos, Vector mobPos) { 
+                double dist = Math.abs(charPos.getX() - mobPos.getX());
+                if (dist < attackRange)
+                    return BehaviorState.ATTACK;
+                else if (dist > detectionRange)
+                    return BehaviorState.PATROL;
+                else
+                    return BehaviorState.CHASE;
+            }
+        },
+        ATTACK {
+            @Override
+            public BehaviorState nextState(Vector charPos, Vector mobPos) { 
+                double dist = Math.abs(charPos.getX() - mobPos.getX());
+                if (dist < attackRange)
+                    return BehaviorState.ATTACK;
+                else
+                    return BehaviorState.CHASE;
+            }
+        };
+
+        public abstract BehaviorState nextState(Vector charPos, Vector mobPos);
+    }
+
+    private BehaviorState currBehaviorState = BehaviorState.PATROL;
 
     public void update() {
         vel.add(0, 0.15); // gravity
@@ -94,17 +92,17 @@ public class Mob implements Updatable {
         double newTargetX = target.getPos().getX();
         int dir = 1;
         switch(currBehaviorState) {
-            case Patrol: //randomly move left or right
+            case PATROL: //randomly move left or right
                 if (Math.abs(targX - newTargetX) < 1)
                     targX = targX + (rand.nextDouble() < .5 ? 100 : -100);
                 dir = newTargetX > targX ? -1 : 1;
                 vel.setX(dir * moveSpeed);
                 break;
-            case Chase: //move towards player
+            case CHASE: //move towards player
                 dir = newTargetX > newPlayerX ? -1 : 1;
                 vel.setX(dir * moveSpeed);
                 break;
-            case Attack: //stop movement
+            case ATTACK: //stop movement
                 vel.setX(0);
                 break;
             default:

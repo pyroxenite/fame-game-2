@@ -120,8 +120,8 @@ public class Game extends Application {
 
         //skeleton test
         ArrayList<Image> skeletonIdle = new ArrayList<>();
-        for (int i = 0; i < 4; i++)
-            skeletonIdle.add(new Image("images/mobs/skeleton/idle/tile00" + i + ".png"));
+        for (int i = 0; i < 11; i++)
+            skeletonIdle.add(new Image("images/mobs/skeleton/idle/idle" + i + ".png"));
         ArrayList<Image> skeletonWalk = new ArrayList<>();
         for (int i = 0; i < 13; i++) {
             String index = "" + i;
@@ -135,7 +135,7 @@ public class Game extends Application {
         skeletonDeltas.put("idle", .2);
         skeletonDeltas.put("walk", .05);
         skeletonSprite = new Sprite(skeletonAnims, skeletonDeltas, "walk");
-        Mob skeleton = new Mob(true, 50, skeletonSprite, adventurer);
+        MobController skeleton = new MobController(true, 50, skeletonSprite, adventurer);
         skeletonSprite.setPos(0, 115);
         updatables.add(skeleton);
         sprites.add(skeletonSprite);
@@ -161,6 +161,11 @@ public class Game extends Application {
         Sprite mushroom5 = new Sprite(new Image("images/mushrooms/type1-single-3.png"));
         mushroom5.setPos(900, 130);
         sprites.add(mushroom5);
+
+
+        //Sprite platformTest = new Sprite(new Image("images/platform.png"));
+        //platformTest.setPos(200, 50);
+        //sprites.add(platformTest);
 
         // controls
         PlayerController playerController = new PlayerController(this, keyHandler);
