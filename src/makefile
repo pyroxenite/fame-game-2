@@ -6,14 +6,14 @@ endif
 
 all: Game.class
 
-Game.class: Game.java Camera.class Sprite.class ParalaxSprite.class Vector.class Updatable.class GameController.class PlayerController.class KeyHandler.class MobController.class
+Game.class: Game.java Camera.class Sprite.class ParallaxSprite.class Vector.class Updatable.class GameController.class PlayerController.class KeyHandler.class MobController.class
 	javac $(modules) Game.java
 
 Sprite.class: Sprite.java Vector.class
 	javac $(modules) Sprite.java
 
-ParalaxSprite.class: ParalaxSprite.java Vector.class
-	javac $(modules) ParalaxSprite.java
+ParallaxSprite.class: ParallaxSprite.java Vector.class
+	javac $(modules) ParallaxSprite.java
 
 Camera.class: Camera.java Vector.class Updatable.class Spring.class
 	javac $(modules) Camera.java
