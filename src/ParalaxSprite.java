@@ -2,12 +2,12 @@ import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-class LayeredSprite {
+class ParalaxSprite {
     protected ArrayList<Image> layers;
     protected int depth = 0;
     protected Vector pos = new Vector();
     
-    public LayeredSprite(ArrayList<Image> layers) {
+    public ParalaxSprite(ArrayList<Image> layers) {
         this.layers = layers;
     }
     

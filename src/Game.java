@@ -56,7 +56,7 @@ public class Game extends Application {
         // for (int i=1; i<=5; i++)
         //     bgLayers.add(new Image("images/bglayers2/layer" + i + ".png"));
 
-        // LayeredSprite background = new LayeredSprite(bgLayers);
+        // ParalaxSprite background = new ParalaxSprite(bgLayers);
         // background.setPos(0, -110);    
 
         // // foreground
@@ -64,7 +64,7 @@ public class Game extends Application {
         // for (int i=0; i<1; i++)
         //     fgLayers.add(new Image("images/bglayers2/layer" + i + ".png"));
 
-        // LayeredSprite foreground = new LayeredSprite(fgLayers);
+        // ParalaxSprite foreground = new ParalaxSprite(fgLayers);
         // foreground.setPos(0, -110);
         // foreground.setDepth(-1);
 
@@ -73,7 +73,7 @@ public class Game extends Application {
         for (int i=1; i<=10; i++)
             bgLayers.add(new Image("images/bglayers/layer" + i + ".png"));
 
-        LayeredSprite background = new LayeredSprite(bgLayers);
+        ParalaxSprite background = new ParalaxSprite(bgLayers);
         background.setPos(0, -600);    
 
         // foreground
@@ -81,7 +81,7 @@ public class Game extends Application {
         for (int i=0; i<1; i++)
             fgLayers.add(new Image("images/bglayers/layer" + i + ".png"));
 
-        LayeredSprite foreground = new LayeredSprite(fgLayers);
+        ParalaxSprite foreground = new ParalaxSprite(fgLayers);
         foreground.setPos(0, -600);
         foreground.setDepth(-1);
 
