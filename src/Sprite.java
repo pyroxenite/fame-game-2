@@ -16,6 +16,8 @@ public class Sprite {
     private Vector pos = new Vector();
     private boolean animated = false;
     private boolean verticalFilp = false;
+    private int currentFrameNumber = 0;
+    private double lastFrameUpdateTime = 0;
 
     /**
      * Used to initialize a single image Sprite.
@@ -60,15 +62,33 @@ public class Sprite {
         pos.setY(y);
     }
 
+    public int getCurrentFrameNumber() {
+        return currentFrameNumber;
+    }
+
     public void setFlipped(boolean verticalFilp) { this.verticalFilp = verticalFilp; } 
+
+    public int getDirection() {
+        return verticalFilp?-1:1;
+    }
 
     public Image getCurrentImage(double time) {
         ArrayList<Image> currentImages = imageSets.get(currentImageSet);
-        int index = (int) (time/deltas.get(currentImageSet)) % currentImages.size();
-        return currentImages.get(index);
+
+        if (time - lastFrameUpdateTime > deltas.get(currentImageSet)) { 
+            currentFrameNumber = (currentFrameNumber + 1) % currentImages.size();
+            lastFrameUpdateTime = time;
+        }
+
+        return currentImages.get(currentFrameNumber);
     }
 
-    public void setImageSet(String setName) { currentImageSet = setName; }
+    public void setImageSet(String setName) { 
+        if (currentImageSet != setName) {
+            currentImageSet = setName; 
+            currentFrameNumber = 0;
+        }
+    }
 
     public void draw(GraphicsContext gc, double t, Camera camera) {
         Image image;

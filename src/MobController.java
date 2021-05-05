@@ -12,9 +12,9 @@ public class MobController implements Updatable {
     private int currentHealth;
     private double moveSpeed = 0.6;
     private double friction = 0;
-    private Game game;
     private static double detectionRange = 150;
     private static double attackRange = 25;
+    private static Game game;
 
     private Random rand = new Random();
     private int targX = 0;
@@ -42,15 +42,14 @@ public class MobController implements Updatable {
 
     public void setTarget(Sprite target) {
         this.target = target;
-        target.setImageSet("walk");
     }
 
     //FSM state and transition implementation
     public enum BehaviorState {
         PATROL {
             @Override
-            public BehaviorState nextState(Vector charPos, Vector mobPos) { 
-                double dist = Math.abs(charPos.getX() - mobPos.getX());
+            public BehaviorState nextState(Sprite mob, Sprite player) { 
+                double dist = Math.abs(player.getPos().getX() - mob.getPos().getX());
                 if (dist < detectionRange)
                     return BehaviorState.CHASE;
                 else 
@@ -59,8 +58,8 @@ public class MobController implements Updatable {
         },
         CHASE {
             @Override
-            public BehaviorState nextState(Vector charPos, Vector mobPos) { 
-                double dist = Math.abs(charPos.getX() - mobPos.getX());
+            public BehaviorState nextState(Sprite mob, Sprite player) { 
+                double dist = Math.abs(player.getPos().getX() - mob.getPos().getX());
                 if (dist < attackRange)
                     return BehaviorState.ATTACK;
                 else if (dist > detectionRange)
@@ -71,16 +70,16 @@ public class MobController implements Updatable {
         },
         ATTACK {
             @Override
-            public BehaviorState nextState(Vector charPos, Vector mobPos) { 
-                double dist = Math.abs(charPos.getX() - mobPos.getX());
-                if (dist < attackRange)
+            public BehaviorState nextState(Sprite mob, Sprite player) { 
+                double dist = Math.abs(player.getPos().getX() - mob.getPos().getX());
+                if (dist < attackRange || mob.getCurrentFrameNumber() != 17)
                     return BehaviorState.ATTACK;
                 else
                     return BehaviorState.CHASE;
             }
         };
 
-        public abstract BehaviorState nextState(Vector charPos, Vector mobPos);
+        public abstract BehaviorState nextState(Sprite mob, Sprite player);
     }
 
     private BehaviorState currBehaviorState = BehaviorState.PATROL;
@@ -100,15 +99,18 @@ public class MobController implements Updatable {
 
         if (vel.getX() > .01) {
             target.setFlipped(false);
+            
         } else if (vel.getX() < -.01) {
             target.setFlipped(true);
+        } else {
+            
         }
 
         //freq used vars for fsm functions
         double newPlayerX = adventurer.getPos().getX();
         double newTargetX = target.getPos().getX();
         int dir = 1;
-        switch(currBehaviorState) {
+        switch (currBehaviorState) {
             case PATROL: //randomly move left or right
                 target.setImageSet("walk");
                 if (Math.abs(targX - newTargetX) < 1)
@@ -117,20 +119,24 @@ public class MobController implements Updatable {
                 vel.setX(dir * moveSpeed);
                 break;
             case CHASE: //move towards player
-                target.setImageSet("walk");
+                target.setImageSet("run");
                 dir = newTargetX > newPlayerX ? -2 : 2;
                 vel.setX(dir * moveSpeed);
                 break;
             case ATTACK: //stop movement
                 vel.setX(0);
                 target.setImageSet("attack");
+                if (target.getCurrentFrameNumber() == 8) {
+                    game.camera.hitSide(10 * target.getDirection());
+                }
                 break;
             default:
+                target.setImageSet("idle");
                 break;
         }
 
         //advance FSM to next state
-        currBehaviorState = currBehaviorState.nextState(adventurer.getPos(), target.getPos());
+        currBehaviorState = currBehaviorState.nextState(target, adventurer);
     }
 
     public void setSprite(Sprite s) { this.target = s; }

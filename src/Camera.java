@@ -118,6 +118,14 @@ class Camera implements Updatable {
         pos.setX(pos.getX()-10);
     }
 
+    public void hitSide(double intensity) {
+        springX.setParameters(3, 0.2, Math.abs(intensity));
+        springY.setParameters(1.3*3, 0.2, Math.abs(intensity));
+
+        pos.setX(pos.getX()-intensity/10);
+        pos.setY(pos.getY()-Math.abs(intensity)/10);
+    }
+
     public void hitGround(double intensity) {
         // springX.setParameters(3, 0.2, intensity);
         springY.setParameters(2, 0.2, intensity);

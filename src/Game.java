@@ -128,23 +128,26 @@ public class Game extends Application {
             skeletonIdle.add(new Image("images/mobs/skeleton/idle/idle" + i + ".png"));
         }
         skeletonAnims.put("idle", skeletonIdle);
+        skeletonDeltas.put("idle", .2);
 
         ArrayList<Image> skeletonWalk = new ArrayList<>();
         for (int i = 0; i < 13; i++) {
             skeletonWalk.add(new Image("images/mobs/skeleton/walk/walk" + i + ".png"));
         }
         skeletonAnims.put("walk", skeletonWalk);
+        skeletonDeltas.put("walk", .05);
+
+        skeletonAnims.put("run", skeletonWalk);
+        skeletonDeltas.put("run", .03);
 
         ArrayList<Image> skeletonAttack = new ArrayList<>();
         for (int i = 0; i < 18; i++) {
             skeletonAttack.add(new Image("images/mobs/skeleton/attack/attack" + i + ".png"));
         }
         skeletonAnims.put("attack", skeletonAttack);
+        skeletonDeltas.put("attack", .05);
 
         
-        
-        skeletonDeltas.put("idle", .2);
-        skeletonDeltas.put("walk", .05);
         skeletonSprite = new Sprite(skeletonAnims, skeletonDeltas, "walk");
         skeletonSprite.setPos(0, 115 - 100);
         sprites.add(skeletonSprite);
