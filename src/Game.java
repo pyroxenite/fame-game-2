@@ -19,6 +19,8 @@ public class Game extends Application {
     Camera camera = new Camera();
     KeyHandler keyHandler = new KeyHandler(scene);
 
+    SoundBackground bgSound;
+
     ArrayList<Sprite> sprites = new ArrayList<>();
     ArrayList<Updatable> updatables = new ArrayList<>();
 
@@ -30,25 +32,25 @@ public class Game extends Application {
         stage.setTitle("Game");
         stage.setScene(scene);
 
-        canvas = new Canvas();
+        stage.setHeight(900);
+        stage.setWidth(1600);
 
+        canvas = new Canvas();
         root.getChildren().add(canvas);
  
         // Bind canvas size to stack pane size.
         canvas.widthProperty().bind(root.widthProperty());
         canvas.heightProperty().bind(root.heightProperty());
 
-
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        
         gc.setImageSmoothing(false); // stops pixel-art from bluring
 
         // game controler
         GameController gameController = new GameController(this);
         updatables.add(gameController);
 
-        //bg sound
-        SoundBackground bgSound = new SoundBackground();
+        // background sound
+        bgSound = new SoundBackground();
         bgSound.run();
         
         // // background
@@ -56,7 +58,7 @@ public class Game extends Application {
         // for (int i=1; i<=5; i++)
         //     bgLayers.add(new Image("images/bglayers2/layer" + i + ".png"));
 
-        // ParalaxSprite background = new ParalaxSprite(bgLayers);
+        // ParallaxSprite background = new ParallaxSprite(bgLayers);
         // background.setPos(0, -110);    
 
         // // foreground
@@ -64,7 +66,7 @@ public class Game extends Application {
         // for (int i=0; i<1; i++)
         //     fgLayers.add(new Image("images/bglayers2/layer" + i + ".png"));
 
-        // ParalaxSprite foreground = new ParalaxSprite(fgLayers);
+        // ParallaxSprite foreground = new ParallaxSprite(fgLayers);
         // foreground.setPos(0, -110);
         // foreground.setDepth(-1);
 
@@ -119,29 +121,41 @@ public class Game extends Application {
 
 
         //skeleton test
-        ArrayList<Image> skeletonIdle = new ArrayList<>();
-        for (int i = 0; i < 11; i++)
-            skeletonIdle.add(new Image("images/mobs/skeleton/idle/idle" + i + ".png"));
-        ArrayList<Image> skeletonWalk = new ArrayList<>();
-        for (int i = 0; i < 13; i++) {
-            String index = "" + i;
-            if (i < 10) index = "0" + index;
-            skeletonWalk.add(new Image("images/mobs/skeleton/walk/tile0" + index + ".png"));
-        }
         Hashtable<String, ArrayList<Image>> skeletonAnims = new Hashtable<>();
         Hashtable<String, Double> skeletonDeltas = new Hashtable<>();
+        ArrayList<Image> skeletonIdle = new ArrayList<>();
+        for (int i = 0; i < 11; i++) {
+            skeletonIdle.add(new Image("images/mobs/skeleton/idle/idle" + i + ".png"));
+        }
         skeletonAnims.put("idle", skeletonIdle);
+
+        ArrayList<Image> skeletonWalk = new ArrayList<>();
+        for (int i = 0; i < 13; i++) {
+            skeletonWalk.add(new Image("images/mobs/skeleton/walk/walk" + i + ".png"));
+        }
         skeletonAnims.put("walk", skeletonWalk);
+
+        ArrayList<Image> skeletonAttack = new ArrayList<>();
+        for (int i = 0; i < 18; i++) {
+            skeletonAttack.add(new Image("images/mobs/skeleton/attack/attack" + i + ".png"));
+        }
+        skeletonAnims.put("attack", skeletonAttack);
+
+        
+        
         skeletonDeltas.put("idle", .2);
         skeletonDeltas.put("walk", .05);
         skeletonSprite = new Sprite(skeletonAnims, skeletonDeltas, "walk");
-        MobController skeleton = new MobController(true, 50, skeletonSprite, adventurer);
-        skeletonSprite.setPos(0, 115);
-        updatables.add(skeleton);
+        skeletonSprite.setPos(0, 115 - 100);
         sprites.add(skeletonSprite);
+        MobController skeleton = new MobController(this);
+        skeleton.setTarget(skeletonSprite);
+        skeleton.setMaxHealth(50);
+        skeleton.setHostile(true);
+        updatables.add(skeleton);
         //end skeleton
         
-
+        {
         Sprite mushroom1 = new Sprite(new Image("images/mushrooms/type1-single-1.png"));
         mushroom1.setPos(100, 130);
         sprites.add(mushroom1);
@@ -161,6 +175,7 @@ public class Game extends Application {
         Sprite mushroom5 = new Sprite(new Image("images/mushrooms/type1-single-3.png"));
         mushroom5.setPos(900, 130);
         sprites.add(mushroom5);
+        }
 
 
         //Sprite platformTest = new Sprite(new Image("images/platform.png"));
@@ -193,15 +208,15 @@ public class Game extends Application {
                 adjustCanvasToWindowSize(gc);
                 camera.applyTransform(gc);
 
-                // update all there is to update
-                for (Updatable obj: updatables)
+                for (Updatable obj: updatables) {
                     obj.update();
+                }
 
-                // draw stuff
                 background.draw(gc, t, camera);
 
-                for (Sprite s: sprites)
+                for (Sprite s: sprites) {
                     s.draw(gc, t, camera);
+                }
 
                 foreground.draw(gc, t, camera);
 

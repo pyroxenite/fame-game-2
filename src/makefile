@@ -6,7 +6,7 @@ endif
 
 all: Game.class
 
-Game.class: Game.java Camera.class Sprite.class ParallaxSprite.class Vector.class Updatable.class GameController.class PlayerController.class KeyHandler.class MobController.class
+Game.class: Game.java Camera.class Sprite.class ParallaxSprite.class Vector.class Updatable.class GameController.class PlayerController.class KeyHandler.class MobController.class SoundBackground.class
 	javac $(modules) Game.java
 
 Sprite.class: Sprite.java Vector.class

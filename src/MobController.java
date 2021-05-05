@@ -12,18 +12,37 @@ public class MobController implements Updatable {
     private int currentHealth;
     private double moveSpeed = 0.6;
     private double friction = 0;
+    private Game game;
     private static double detectionRange = 150;
     private static double attackRange = 25;
 
     private Random rand = new Random();
     private int targX = 0;
 
-    public MobController(Boolean hostile, int maxHealth, Sprite sprite, Sprite adventurer) {
-        this.hostile = hostile;
-        this.maxHealth = maxHealth;
+    public MobController(Game game) {
+        this.game = game;
+        this.hostile = false;
+        this.maxHealth = 50;
         this.currentHealth = maxHealth;
-        this.target = sprite;
-        this.adventurer = adventurer;
+        this.target = null;
+        this.adventurer = game.adventurer;
+    }
+
+    public void setHostile(boolean isHostile) {
+        this.hostile = isHostile;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
+    public void setCurrentHealth(int currentHealth) {
+        this.currentHealth = currentHealth;
+    }
+
+    public void setTarget(Sprite target) {
+        this.target = target;
+        target.setImageSet("walk");
     }
 
     //FSM state and transition implementation
@@ -74,17 +93,15 @@ public class MobController implements Updatable {
         //keep entity above ground
         if (target.getPos().getY() > 115) {
             target.getPos().setY(115);
+            if (vel.getY() > 1)
+                game.camera.hitGround(vel.getY()*5);
             vel.setY(0);
         }
 
         if (vel.getX() > .01) {
             target.setFlipped(false);
-            target.setImageSet("walk");
         } else if (vel.getX() < -.01) {
             target.setFlipped(true);
-            target.setImageSet("walk");
-        } else {
-            target.setImageSet("idle");
         }
 
         //freq used vars for fsm functions
@@ -93,17 +110,20 @@ public class MobController implements Updatable {
         int dir = 1;
         switch(currBehaviorState) {
             case PATROL: //randomly move left or right
+                target.setImageSet("walk");
                 if (Math.abs(targX - newTargetX) < 1)
                     targX = targX + (rand.nextDouble() < .5 ? 100 : -100);
                 dir = newTargetX > targX ? -1 : 1;
                 vel.setX(dir * moveSpeed);
                 break;
             case CHASE: //move towards player
-                dir = newTargetX > newPlayerX ? -1 : 1;
+                target.setImageSet("walk");
+                dir = newTargetX > newPlayerX ? -2 : 2;
                 vel.setX(dir * moveSpeed);
                 break;
             case ATTACK: //stop movement
                 vel.setX(0);
+                target.setImageSet("attack");
                 break;
             default:
                 break;

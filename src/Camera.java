@@ -19,43 +19,48 @@ import javafx.scene.transform.Transform;
 class Camera implements Updatable {
     /** The true position of the camera. */
     private Vector pos = new Vector();
+    private double scale = 1.0;
+    private Vector aimPos = new Vector();
+    private double aimScale = 1.0;
+    private double speed = 0.05;
+
     /** Instantly sets position. */
     public void setPos(Vector pos) { 
         this.pos = pos.copy();
         this.aimPos = pos.copy();
     }
+
     public void setPos(double x, double y) { 
         pos = new Vector(x, y); 
         aimPos = pos.copy();
     }
+
     public Vector getPos() { return pos; }
 
     /** The true zoom level of the camera. */
-    private double scale = 1.0;
     /** Instantly sets zoom level. */
     public void setScale(double scale) { 
         this.scale = scale;
         this.aimScale = scale;
     }
+
     public double getScale() { return scale; }
 
     /** The desired position of the camera. */
-    private Vector aimPos = new Vector();
     public void setAimPos(Vector pos) { this.aimPos = pos; }
     public void setAimPos(double x, double y) { this.aimPos = new Vector(x, y); }
     public Vector getAimPos() { return aimPos; }
 
     /** The desired zoom level of the camera. */
-    private double aimScale = 1.0;
     public void setAimScale(double scale) { this.aimScale = scale; }
     public double getAimScale() { return aimScale; }
     
-    /** 
+    /**
      * The speed at which the camera glides to the desired values. It can vary from
      * 0.0 to 1.0 where 0.0 represents a fixed camera and 1.0 represents a camera that
      * reaches instantly its desired aim.
+     * @param speed The speed.
      */
-    private double speed = 0.05;
     public void setSpeed(double speed) { this.speed = speed; }
     
     /**

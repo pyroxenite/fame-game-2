@@ -16,7 +16,7 @@ class Spring implements Updatable {
     public void update() {
         pos += vel * dt;
         vel -= omega*omega*pos*dt;
-        vel *= (1-alpha);
+        vel = vel*(1-alpha);
     }
 
     public static void main(String[] args) {
@@ -28,5 +28,3 @@ class Spring implements Updatable {
         }
     }
 }
-
-//
