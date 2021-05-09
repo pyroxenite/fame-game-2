@@ -15,6 +15,7 @@ public class MobController implements Updatable {
     private static double detectionRange = 150;
     private static double attackRange = 25;
     private static Game game;
+    private boolean hasHitPlayer, hasPlayerHit;
 
     private Random rand = new Random();
     private int targX = 0;
@@ -83,6 +84,7 @@ public class MobController implements Updatable {
     }
 
     private BehaviorState currBehaviorState = BehaviorState.PATROL;
+    private BehaviorState prevBehaviorState = currBehaviorState;
 
     public void update() {
         vel.add(0, 0.15); // gravity
@@ -106,6 +108,8 @@ public class MobController implements Updatable {
             
         }
 
+        currBehaviorState = currBehaviorState.nextState(target, adventurer);
+
         //freq used vars for fsm functions
         double newPlayerX = adventurer.getPos().getX();
         double newTargetX = target.getPos().getX();
@@ -124,10 +128,17 @@ public class MobController implements Updatable {
                 vel.setX(dir * moveSpeed);
                 break;
             case ATTACK: //stop movement
+                if (prevBehaviorState != BehaviorState.ATTACK) hasHitPlayer = false; //reset has hit player flag on state change
                 vel.setX(0);
                 target.setImageSet("attack");
-                if (target.getCurrentFrameNumber() == 8) {
-                    game.camera.hitSide(10 * target.getDirection());
+                if (target.getCurrentFrameNumber() == 1) hasHitPlayer = false; //reset hit player flag on new anim cycle
+                if (target.getCurrentFrameNumber() >= 8) { //hit frames
+                    if (!hasHitPlayer && target.intersects(adventurer)) { //has hit
+                        game.camera.hitSide(10 * target.getDirection());
+                        game.playerController.incHealth(-1);
+                        game.playerController.knockBack(10, (int) -Math.signum(target.getPos().getX() - adventurer.getPos().getX()));
+                        hasHitPlayer = true; //set hit player flag
+                    }
                 }
                 break;
             default:
@@ -136,7 +147,7 @@ public class MobController implements Updatable {
         }
 
         //advance FSM to next state
-        currBehaviorState = currBehaviorState.nextState(target, adventurer);
+        prevBehaviorState = currBehaviorState;
     }
 
     public void setSprite(Sprite s) { this.target = s; }

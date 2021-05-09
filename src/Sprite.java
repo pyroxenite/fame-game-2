@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.Hashtable;
-
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -88,6 +88,16 @@ public class Sprite {
             currentImageSet = setName; 
             currentFrameNumber = 0;
         }
+    }
+
+    public Rectangle2D getBoundary() { 
+        ArrayList<Image> currentImages = imageSets.get(currentImageSet);
+        Image currentImage = currentImages.get(currentFrameNumber);
+        return new Rectangle2D(pos.getX(), pos.getY(), currentImage.getWidth(), currentImage.getHeight());
+    }
+
+    public boolean intersects(Sprite spr) {
+        return spr.getBoundary().intersects(this.getBoundary());
     }
 
     public void draw(GraphicsContext gc, double t, Camera camera) {

@@ -27,6 +27,8 @@ public class Game extends Application {
     Sprite adventurer;
     Sprite skeletonSprite;
 
+    public PlayerController playerController;
+
     @Override
     public void start(Stage stage) {
         stage.setTitle("Game");
@@ -181,12 +183,12 @@ public class Game extends Application {
         }
 
 
-        //Sprite platformTest = new Sprite(new Image("images/platform.png"));
-        //platformTest.setPos(200, 50);
-        //sprites.add(platformTest);
+        Sprite platformTest = new Sprite(new Image("images/platform.png"));
+        platformTest.setPos(200, 50);
+        sprites.add(platformTest);
 
         // controls
-        PlayerController playerController = new PlayerController(this, keyHandler);
+        playerController = new PlayerController(this, keyHandler);
         playerController.setTarget(adventurer);
         playerController.setActiveSpeed(0.8);
         playerController.setFriction(0.3);
@@ -224,6 +226,7 @@ public class Game extends Application {
                 foreground.draw(gc, t, camera);
 
                 drawBlackRects(gc);
+                drawHealth(gc);
             }
         }.start();
 
@@ -255,6 +258,14 @@ public class Game extends Application {
         } else {
             gc.fillRect(0, 0, (width-height/9*16)/2, height);
             gc.fillRect(width-(width-height/9*16)/2, 0, (width-height/9*16)/2, height);
+        }
+    }
+
+    public void drawHealth(GraphicsContext gc) {
+        for (int i = 0; i < playerController.maxHealth(); i++) {
+            final int HEART_SIZE = 50;
+            Image heart = new Image("images/ui/heart" + (i + 1 <= playerController.currentHealth() ? "full" : "empty") + ".png");
+            gc.drawImage(heart, i * HEART_SIZE * 1.25 + 30, 10, HEART_SIZE, HEART_SIZE);
         }
     }
 

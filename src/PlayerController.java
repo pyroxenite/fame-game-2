@@ -8,6 +8,7 @@ public class PlayerController implements Updatable {
     private double activeSpeed = 1;
     private double friction = 0;
     private KeyHandler keyHandler;
+    private int maxHealth = 5, currentHealth = 5;
 
     public PlayerController(Game game, KeyHandler keyHandler) {
         this.game = game;
@@ -26,6 +27,20 @@ public class PlayerController implements Updatable {
     public double getFriction() { return friction; }
 
     public void setFriction(double friction) { this.friction = friction; }
+
+    public void incHealth(int inc) { 
+        currentHealth = currentHealth + inc; 
+        if (currentHealth > maxHealth) currentHealth = maxHealth;
+        if (currentHealth < 0) currentHealth = 0;
+    }
+
+    public void knockBack(int magnitude, int dir) { 
+        System.out.println(magnitude + ", " +dir);
+        vel.add(dir * magnitude * 2, -magnitude / 5);
+    }
+
+    public int currentHealth() {return currentHealth;}
+    public int maxHealth() {return maxHealth;}
 
     public void update() {
         moveAccordingToKeysPressed();
