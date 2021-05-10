@@ -74,13 +74,16 @@ public class Sprite {
 
     public Image getCurrentImage(double time) {
         ArrayList<Image> currentImages = imageSets.get(currentImageSet);
-
         if (time - lastFrameUpdateTime > deltas.get(currentImageSet)) { 
             currentFrameNumber = (currentFrameNumber + 1) % currentImages.size();
             lastFrameUpdateTime = time;
         }
 
         return currentImages.get(currentFrameNumber);
+    }
+
+    public int getCurrentImageSetCount() { 
+        return imageSets.get(currentImageSet).size(); 
     }
 
     public void setImageSet(String setName) { 

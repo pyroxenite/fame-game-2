@@ -105,17 +105,41 @@ public class Game extends Application {
         for (int i = 0; i < 2; i++)
             fall.add(new Image("images/adventurer/fall-0" + i + ".png"));
 
+        ArrayList<Image> attack1 = new ArrayList<>();
+        for (int i = 0; i < 5; i++)
+            attack1.add(new Image("images/adventurer/attack1-0" + i + ".png"));
+
+        ArrayList<Image> attack2 = new ArrayList<>();
+        for (int i = 0; i < 6; i++)
+            attack2.add(new Image("images/adventurer/attack2-0" + i + ".png"));
+
+        ArrayList<Image> attack3 = new ArrayList<>();
+        for (int i = 0; i < 6; i++)
+            attack3.add(new Image("images/adventurer/attack3-0" + i + ".png"));
+
+        ArrayList<Image> stagger = new ArrayList<>();
+        for (int i = 0; i < 3; i++)
+            stagger.add(new Image("images/adventurer/hurt-0" + i + ".png"));
+
         Hashtable<String, ArrayList<Image>> adventurerAnims = new Hashtable<>();
         adventurerAnims.put("idle", idle);
         adventurerAnims.put("run", run);
         adventurerAnims.put("jump", jump);
         adventurerAnims.put("fall", fall);
+        adventurerAnims.put("attack1", attack1);
+        adventurerAnims.put("attack2", attack2);
+        adventurerAnims.put("attack3", attack3);
+        adventurerAnims.put("stagger", stagger);
 
         Hashtable<String, Double> adventurerAnimsDeltas = new Hashtable<>();
         adventurerAnimsDeltas.put("idle", .2);
         adventurerAnimsDeltas.put("run", .08);
         adventurerAnimsDeltas.put("jump", .1);
         adventurerAnimsDeltas.put("fall", .2);
+        adventurerAnimsDeltas.put("attack1", .1);
+        adventurerAnimsDeltas.put("attack2", .1);
+        adventurerAnimsDeltas.put("attack3", .1);
+        adventurerAnimsDeltas.put("stagger", .1);
 
         adventurer = new Sprite(adventurerAnims, adventurerAnimsDeltas, "idle");
         adventurer.setPos(0, 115);
@@ -123,33 +147,37 @@ public class Game extends Application {
 
 
         //skeleton test
-        Hashtable<String, ArrayList<Image>> skeletonAnims = new Hashtable<>();
-        Hashtable<String, Double> skeletonDeltas = new Hashtable<>();
         ArrayList<Image> skeletonIdle = new ArrayList<>();
         for (int i = 0; i < 11; i++) {
             skeletonIdle.add(new Image("images/mobs/skeleton/idle/idle" + i + ".png"));
         }
-        skeletonAnims.put("idle", skeletonIdle);
-        skeletonDeltas.put("idle", .2);
-
         ArrayList<Image> skeletonWalk = new ArrayList<>();
         for (int i = 0; i < 13; i++) {
             skeletonWalk.add(new Image("images/mobs/skeleton/walk/walk" + i + ".png"));
         }
-        skeletonAnims.put("walk", skeletonWalk);
-        skeletonDeltas.put("walk", .05);
-
-        skeletonAnims.put("run", skeletonWalk);
-        skeletonDeltas.put("run", .03);
-
         ArrayList<Image> skeletonAttack = new ArrayList<>();
         for (int i = 0; i < 18; i++) {
             skeletonAttack.add(new Image("images/mobs/skeleton/attack/attack" + i + ".png"));
         }
-        skeletonAnims.put("attack", skeletonAttack);
-        skeletonDeltas.put("attack", .05);
-
+        ArrayList<Image> skeletonStagger = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            skeletonStagger.add(new Image("images/mobs/skeleton/damage/damage" + i + ".png"));
+        }
         
+        Hashtable<String, ArrayList<Image>> skeletonAnims = new Hashtable<>();
+        skeletonAnims.put("idle", skeletonIdle);
+        skeletonAnims.put("walk", skeletonWalk);
+        skeletonAnims.put("run", skeletonWalk);
+        skeletonAnims.put("attack", skeletonAttack);
+        skeletonAnims.put("stagger", skeletonStagger);
+
+        Hashtable<String, Double> skeletonDeltas = new Hashtable<>();
+        skeletonDeltas.put("idle", .2);
+        skeletonDeltas.put("walk", .05);
+        skeletonDeltas.put("run", .03);
+        skeletonDeltas.put("attack", .05);
+        skeletonDeltas.put("stagger", .05);
+
         skeletonSprite = new Sprite(skeletonAnims, skeletonDeltas, "walk");
         skeletonSprite.setPos(0, 115 - 100);
         sprites.add(skeletonSprite);

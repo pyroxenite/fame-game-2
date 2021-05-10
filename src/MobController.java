@@ -11,11 +11,11 @@ public class MobController implements Updatable {
     private int maxHealth;
     private int currentHealth;
     private double moveSpeed = 0.6;
-    private double friction = 0;
+    private double friction = .05;
     private static double detectionRange = 150;
     private static double attackRange = 25;
     private static Game game;
-    private boolean hasHitPlayer, hasPlayerHit;
+    private boolean hasHitPlayer, hasPlayerHit, staggered;
 
     private Random rand = new Random();
     private int targX = 0;
@@ -91,6 +91,23 @@ public class MobController implements Updatable {
         vel.scaleX(1 - friction); // friction with ground
         target.getPos().add(vel);
 
+        if (staggered && target.getCurrentFrameNumber() == 5) staggered = false;
+
+        //handle hit on mob from player
+        if (
+            game.playerController.attacking() && 
+            target.intersects(adventurer) && 
+            adventurer.getCurrentFrameNumber() >= 3 &&
+            !game.playerController.onHitList(target)
+        ) {
+            int dir = (int) Math.signum(target.getPos().getX() - adventurer.getPos().getX());
+            int magnitude = 1;
+            currentHealth -= game.playerController.damage();
+            vel.add(dir * magnitude * 2, -magnitude);
+            staggered = true;
+            target.setImageSet("stagger");
+        }
+
         //keep entity above ground
         if (target.getPos().getY() > 115) {
             target.getPos().setY(115);
@@ -99,55 +116,54 @@ public class MobController implements Updatable {
             vel.setY(0);
         }
 
-        if (vel.getX() > .01) {
-            target.setFlipped(false);
-            
-        } else if (vel.getX() < -.01) {
-            target.setFlipped(true);
-        } else {
-            
-        }
+        if (!staggered) {
+            if (vel.getX() > .5) {
+                target.setFlipped(false);
+            } else if (vel.getX() < -.5) {
+                target.setFlipped(true);
+            }
 
-        currBehaviorState = currBehaviorState.nextState(target, adventurer);
+            currBehaviorState = currBehaviorState.nextState(target, adventurer);
 
-        //freq used vars for fsm functions
-        double newPlayerX = adventurer.getPos().getX();
-        double newTargetX = target.getPos().getX();
-        int dir = 1;
-        switch (currBehaviorState) {
-            case PATROL: //randomly move left or right
-                target.setImageSet("walk");
-                if (Math.abs(targX - newTargetX) < 1)
-                    targX = targX + (rand.nextDouble() < .5 ? 100 : -100);
-                dir = newTargetX > targX ? -1 : 1;
-                vel.setX(dir * moveSpeed);
-                break;
-            case CHASE: //move towards player
-                target.setImageSet("run");
-                dir = newTargetX > newPlayerX ? -2 : 2;
-                vel.setX(dir * moveSpeed);
-                break;
-            case ATTACK: //stop movement
-                if (prevBehaviorState != BehaviorState.ATTACK) hasHitPlayer = false; //reset has hit player flag on state change
-                vel.setX(0);
-                target.setImageSet("attack");
-                if (target.getCurrentFrameNumber() == 1) hasHitPlayer = false; //reset hit player flag on new anim cycle
-                if (target.getCurrentFrameNumber() >= 8) { //hit frames
-                    if (!hasHitPlayer && target.intersects(adventurer)) { //has hit
-                        game.camera.hitSide(10 * target.getDirection());
-                        game.playerController.incHealth(-1);
-                        game.playerController.knockBack(10, (int) -Math.signum(target.getPos().getX() - adventurer.getPos().getX()));
-                        hasHitPlayer = true; //set hit player flag
+            //freq used vars for fsm functions
+            double newPlayerX = adventurer.getPos().getX();
+            double newTargetX = target.getPos().getX();
+            int dir = 1;
+            switch (currBehaviorState) {
+                case PATROL: //randomly move left or right
+                    target.setImageSet("walk");
+                    if (Math.abs(targX - newTargetX) < 1)
+                        targX = targX + (rand.nextDouble() < .5 ? 100 : -100);
+                    dir = newTargetX > targX ? -1 : 1;
+                    vel.setX(dir * moveSpeed);
+                    break;
+                case CHASE: //move towards player
+                    target.setImageSet("run");
+                    dir = newTargetX > newPlayerX ? -2 : 2;
+                    vel.setX(dir * moveSpeed);
+                    break;
+                case ATTACK: //stop movement
+                    if (prevBehaviorState != BehaviorState.ATTACK) hasHitPlayer = false; //reset has hit player flag on state change
+                    vel.setX(0);
+                    target.setImageSet("attack");
+                    if (target.getCurrentFrameNumber() == 1) hasHitPlayer = false; //reset hit player flag on new anim cycle
+                    if (target.getCurrentFrameNumber() >= 8) { //hit frames
+                        if (!hasHitPlayer && target.intersects(adventurer)) { //has hit
+                            game.camera.hitSide(10 * target.getDirection());
+                            game.playerController.incHealth(-1);
+                            game.playerController.knockBack(10, (int) -Math.signum(target.getPos().getX() - adventurer.getPos().getX()));
+                            hasHitPlayer = true; //set hit player flag
+                        }
                     }
-                }
-                break;
-            default:
-                target.setImageSet("idle");
-                break;
-        }
+                    break;
+                default:
+                    target.setImageSet("idle");
+                    break;
+            }
 
-        //advance FSM to next state
-        prevBehaviorState = currBehaviorState;
+            //advance FSM to next state
+            prevBehaviorState = currBehaviorState;
+        }
     }
 
     public void setSprite(Sprite s) { this.target = s; }
