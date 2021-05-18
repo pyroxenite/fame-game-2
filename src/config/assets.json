@@ -1,0 +1,68 @@
+{
+    "adventurer": {
+        "idle": {
+            "path": "images/adventurer/idle-0",
+            "delta": 0.2
+        },
+        "run": {
+            "path": "images/adventurer/run-0",
+            "delta": 0.08
+        },
+        "jump": {
+            "path": "images/adventurer/jump-0",
+            "delta": 0.2
+        },
+        "fall": {
+            "path": "images/adventurer/fall-0",
+            "delta": 0.2
+        },
+        "attack1": {
+            "path": "images/adventurer/attack1-0",
+            "delta": 0.1
+        },
+        "attack2": {
+            "path": "images/adventurer/attack2-0",
+            "delta": 0.1
+        },
+        "attack3": {
+            "path": "images/adventurer/attack3-0",
+            "delta": 0.1
+        },
+        "stagger": {
+            "path": "images/adventurer/hurt-0",
+            "delta": 0.1
+        }
+    },
+    "skeleton" : {
+        "idle": {
+            "path": "images/mobs/skeleton/idle/idle",
+            "delta": 0.2
+        },
+        "walk": {
+            "path": "images/mobs/skeleton/walk/walk",
+            "delta": 0.2
+        },
+        "run": {
+            "path": "images/mobs/skeleton/walk/walk",
+            "delta": 0.03
+        },
+        "attack": {
+            "path": "images/mobs/skeleton/attack/attack",
+            "delta": 0.05
+        },
+        "stagger": {
+            "path": "images/mobs/skeleton/damage/damage",
+            "delta": 0.05
+        }
+    },
+    "environment": {
+        "mushroom1": "images/mushrooms/type1-single-1.png",
+        "mushroom2": "images/mushrooms/type1-double-1.png",
+        "mushroom3": "images/mushrooms/type1-single-2.png",
+        "mushroom4": "images/mushrooms/type1-triple-1.png",
+        "mushroom5": "images/mushrooms/type1-single-3.png"
+    },
+    "platforms": {
+        "platform1": "images/platform.png"
+    }
+}

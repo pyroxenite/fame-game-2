@@ -89,96 +89,14 @@ public class Game extends Application {
         foreground.setPos(0, -600);
         foreground.setDepth(-1);
 
-        ArrayList<Image> idle = new ArrayList<>();
-        for (int i = 0; i < 4; i++)
-            idle.add(new Image("images/adventurer/idle-0" + i + ".png"));
-
-        ArrayList<Image> run = new ArrayList<>();
-        for (int i = 0; i < 6; i++)
-            run.add(new Image("images/adventurer/run-0" + i + ".png"));
-
-        ArrayList<Image> jump = new ArrayList<>();
-        for (int i = 2; i < 3; i++) // using only one image to prevent ugly looping for now
-            jump.add(new Image("images/adventurer/jump-0" + i + ".png"));
-
-        ArrayList<Image> fall = new ArrayList<>();
-        for (int i = 0; i < 2; i++)
-            fall.add(new Image("images/adventurer/fall-0" + i + ".png"));
-
-        ArrayList<Image> attack1 = new ArrayList<>();
-        for (int i = 0; i < 5; i++)
-            attack1.add(new Image("images/adventurer/attack1-0" + i + ".png"));
-
-        ArrayList<Image> attack2 = new ArrayList<>();
-        for (int i = 0; i < 6; i++)
-            attack2.add(new Image("images/adventurer/attack2-0" + i + ".png"));
-
-        ArrayList<Image> attack3 = new ArrayList<>();
-        for (int i = 0; i < 6; i++)
-            attack3.add(new Image("images/adventurer/attack3-0" + i + ".png"));
-
-        ArrayList<Image> stagger = new ArrayList<>();
-        for (int i = 0; i < 3; i++)
-            stagger.add(new Image("images/adventurer/hurt-0" + i + ".png"));
-
-        Hashtable<String, ArrayList<Image>> adventurerAnims = new Hashtable<>();
-        adventurerAnims.put("idle", idle);
-        adventurerAnims.put("run", run);
-        adventurerAnims.put("jump", jump);
-        adventurerAnims.put("fall", fall);
-        adventurerAnims.put("attack1", attack1);
-        adventurerAnims.put("attack2", attack2);
-        adventurerAnims.put("attack3", attack3);
-        adventurerAnims.put("stagger", stagger);
-
-        Hashtable<String, Double> adventurerAnimsDeltas = new Hashtable<>();
-        adventurerAnimsDeltas.put("idle", .2);
-        adventurerAnimsDeltas.put("run", .08);
-        adventurerAnimsDeltas.put("jump", .1);
-        adventurerAnimsDeltas.put("fall", .2);
-        adventurerAnimsDeltas.put("attack1", .1);
-        adventurerAnimsDeltas.put("attack2", .1);
-        adventurerAnimsDeltas.put("attack3", .1);
-        adventurerAnimsDeltas.put("stagger", .1);
-
-        adventurer = new Sprite(adventurerAnims, adventurerAnimsDeltas, "idle");
+        //player
+        adventurer = new AnimationLoader().loadAnimation("adventurer");
         adventurer.setPos(0, 115);
         sprites.add(adventurer);
+        //end player
 
-
-        //skeleton test
-        ArrayList<Image> skeletonIdle = new ArrayList<>();
-        for (int i = 0; i < 11; i++) {
-            skeletonIdle.add(new Image("images/mobs/skeleton/idle/idle" + i + ".png"));
-        }
-        ArrayList<Image> skeletonWalk = new ArrayList<>();
-        for (int i = 0; i < 13; i++) {
-            skeletonWalk.add(new Image("images/mobs/skeleton/walk/walk" + i + ".png"));
-        }
-        ArrayList<Image> skeletonAttack = new ArrayList<>();
-        for (int i = 0; i < 18; i++) {
-            skeletonAttack.add(new Image("images/mobs/skeleton/attack/attack" + i + ".png"));
-        }
-        ArrayList<Image> skeletonStagger = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            skeletonStagger.add(new Image("images/mobs/skeleton/damage/damage" + i + ".png"));
-        }
-        
-        Hashtable<String, ArrayList<Image>> skeletonAnims = new Hashtable<>();
-        skeletonAnims.put("idle", skeletonIdle);
-        skeletonAnims.put("walk", skeletonWalk);
-        skeletonAnims.put("run", skeletonWalk);
-        skeletonAnims.put("attack", skeletonAttack);
-        skeletonAnims.put("stagger", skeletonStagger);
-
-        Hashtable<String, Double> skeletonDeltas = new Hashtable<>();
-        skeletonDeltas.put("idle", .2);
-        skeletonDeltas.put("walk", .05);
-        skeletonDeltas.put("run", .03);
-        skeletonDeltas.put("attack", .05);
-        skeletonDeltas.put("stagger", .05);
-
-        skeletonSprite = new Sprite(skeletonAnims, skeletonDeltas, "walk");
+        //skeleton
+        skeletonSprite = new AnimationLoader().loadAnimation("skeleton");
         skeletonSprite.setPos(0, 115 - 100);
         sprites.add(skeletonSprite);
         MobController skeleton = new MobController(this);
