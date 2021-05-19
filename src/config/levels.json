@@ -1,0 +1,17 @@
+{
+    "Level 1": {
+        "biomeName": "forest",
+        "platforms": {},
+        "mobs": {}
+    },
+    "Level 2": {
+        "biomeName": "mountain",
+        "platforms": {},
+        "mobs": {}
+    },
+    "Level 3": {
+        "biomeName": "hills",
+        "platforms": {},
+        "mobs": {}
+    }
+}

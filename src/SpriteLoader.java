@@ -7,11 +7,50 @@ import java.util.*;
 import org.json.simple.*;
 import org.json.simple.parser.*;
 
-public class AnimationLoader {
+public class SpriteLoader {
     
-    public Sprite loadAnimation(String assetName) {
-        JSONParser parser = new JSONParser();
+    JSONParser parser = new JSONParser();
 
+    public ArrayList<ParallaxSprite> loadBackground(String levelName) {
+        ArrayList<ParallaxSprite> ret = new ArrayList<>();
+        ArrayList<Image> TEST = new ArrayList<>();
+        ArrayList<Image> TEST1 = new ArrayList<>();
+
+        // ArrayList<Image> TEST = new ArrayList<>();
+        // System.out.println(TEST.size());
+        
+        try {
+            Object obj = parser.parse(new FileReader("config/levels.json"));
+            JSONObject jsonObject = (JSONObject)obj;
+            JSONObject spriteSheet = (JSONObject)jsonObject.get(levelName);
+            
+            for (Object k : spriteSheet.keySet()) {
+                String key = (String)k;
+                if (key.equals("biomeName")) {
+                    String biomeName = (String)spriteSheet.get(key);
+                    File folder = new File("images/bglayers/" + biomeName);
+                    int images = folder.listFiles().length;
+                    System.out.println(images);
+                    for (int i = 1; i < images; i++) {
+                        TEST.add(new Image("images/bglayers/" + biomeName + "/layer" + i + ".png"));
+                    }
+                    TEST1.add(new Image("images/bglayers/" + biomeName + "/layer0.png"));
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ParallaxSprite background = new ParallaxSprite(TEST);
+        ParallaxSprite foreground = new ParallaxSprite(TEST1);
+        ret.add(background);
+        ret.add(foreground);
+
+        return ret;
+    }
+
+    public Sprite loadAnimation(String assetName) {
         Hashtable<String, ArrayList<Image>> anims = new Hashtable<>();
         Hashtable<String, Double> deltas = new Hashtable<>();
 

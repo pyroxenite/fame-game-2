@@ -55,48 +55,34 @@ public class Game extends Application {
         bgSound = new SoundBackground();
         bgSound.run();
         
-        // // background
-        // ArrayList<Image> bgLayers = new ArrayList<>();
-        // for (int i=1; i<=5; i++)
-        //     bgLayers.add(new Image("images/bglayers2/layer" + i + ".png"));
-
-        // ParallaxSprite background = new ParallaxSprite(bgLayers);
-        // background.setPos(0, -110);    
-
-        // // foreground
-        // ArrayList<Image> fgLayers = new ArrayList<>();
-        // for (int i=0; i<1; i++)
-        //     fgLayers.add(new Image("images/bglayers2/layer" + i + ".png"));
-
-        // ParallaxSprite foreground = new ParallaxSprite(fgLayers);
-        // foreground.setPos(0, -110);
-        // foreground.setDepth(-1);
-
         // background
         ArrayList<Image> bgLayers = new ArrayList<>();
-        for (int i=1; i<=10; i++)
-            bgLayers.add(new Image("images/bglayers/layer" + i + ".png"));
+        for (int i=1; i<=5; i++)
+            bgLayers.add(new Image("images/bglayers/hills/layer" + i + ".png"));
 
         ParallaxSprite background = new ParallaxSprite(bgLayers);
-        background.setPos(0, -600);    
+        // ArrayList<ParallaxSprite> backgrounds = (new SpriteLoader()).loadBackground("Level 3");
+        // ParallaxSprite background = backgrounds.get(0);
+        // ParallaxSprite foreground = backgrounds.get(1);
+        background.setPos(0, -105);    
 
         // foreground
         ArrayList<Image> fgLayers = new ArrayList<>();
         for (int i=0; i<1; i++)
-            fgLayers.add(new Image("images/bglayers/layer" + i + ".png"));
+            fgLayers.add(new Image("images/bglayers/hills/layer" + i + ".png"));
 
         ParallaxSprite foreground = new ParallaxSprite(fgLayers);
-        foreground.setPos(0, -600);
+        foreground.setPos(0, -105);
         foreground.setDepth(-1);
 
         //player
-        adventurer = new AnimationLoader().loadAnimation("adventurer");
+        adventurer = new SpriteLoader().loadAnimation("adventurer");
         adventurer.setPos(0, 115);
         sprites.add(adventurer);
         //end player
 
         //skeleton
-        skeletonSprite = new AnimationLoader().loadAnimation("skeleton");
+        skeletonSprite = new SpriteLoader().loadAnimation("skeleton");
         skeletonSprite.setPos(0, 115 - 100);
         sprites.add(skeletonSprite);
         MobController skeleton = new MobController(this);
