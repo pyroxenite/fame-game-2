@@ -4,43 +4,10 @@ else
     modules = --module-path ../lib/javafx-sdk-16-mac/lib --add-modules javafx.controls --add-modules javafx.media
 endif
 
-all: Game.class
+classpath = -cp ../bin/json-simple.jar
 
-Game.class: Game.java Camera.class Sprite.class ParallaxSprite.class Vector.class Updatable.class GameController.class PlayerController.class KeyHandler.class MobController.class SoundBackground.class
-	javac $(modules) Game.java
-
-Sprite.class: Sprite.java Vector.class
-	javac $(modules) Sprite.java
-
-ParallaxSprite.class: ParallaxSprite.java Vector.class
-	javac $(modules) ParallaxSprite.java
-
-Camera.class: Camera.java Vector.class Updatable.class Spring.class
-	javac $(modules) Camera.java
-
-GameController.class: GameController.java KeyHandler.class Updatable.class
-	javac $(modules) GameController.java
-
-PlayerController.class: PlayerController.java KeyHandler.class Sprite.class Vector.class Updatable.class
-	javac $(modules) PlayerController.java
-
-KeyHandler.class: KeyHandler.java
-	javac $(modules) KeyHandler.java
-
-MobController.class: MobController.java Sprite.java Vector.java Updatable.java
-	javac $(modules) MobController.java
-
-Vector.class: Vector.java
-	javac $(modules) Vector.java
-
-Updatable.class: Updatable.java
-	javac Updatable.java
-
-Spring.class: Spring.java
-	javac Spring.java
-
-SoundBackground.class: SoundBackground.java
-	javac $(modules) SoundBackground.java
+all:
+	javac $(modules) $(classpath) *.java
 
 clean:
 	rm *.class
