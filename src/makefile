@@ -7,7 +7,7 @@ endif
 classpath = -cp ../bin/json-simple.jar
 
 all:
-	javac $(modules) $(classpath) *.java
+	javac $(modules) *.java
 
 clean:
 	rm *.class
