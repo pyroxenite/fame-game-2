@@ -8,7 +8,7 @@ public class PlayerController implements Updatable {
     private double activeSpeed = 1;
     private double friction = 0;
     private KeyHandler keyHandler;
-    private int maxHealth = 5, currentHealth = 5;
+    private int maxHealth = 10, currentHealth = 10;
     private boolean attacking, staggered = false;
     private int currentAttackAnim = 1;
     private int damage = 1;
@@ -89,7 +89,7 @@ public class PlayerController implements Updatable {
             }
         }
 
-        if (target.getPos().getY() > 115) {
+        if (target.getPos().getY() > 115) { // 115
             target.getPos().setY(115);
             if (vel.getY() > 1)
                 game.camera.hitGround(vel.getY()*5);

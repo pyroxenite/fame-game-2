@@ -21,7 +21,7 @@ class ParallaxSprite {
     public int getDepth() { return depth; }
     public void setDepth(int depth) { this.depth = depth; }
 
-    public void draw(GraphicsContext gc, double t, Camera camera) {
+    public void draw(GraphicsContext gc, Camera camera) {
         double width = layers.get(0).getWidth();
         double viewWidth = 1200 / camera.getScale();
         for (int i=layers.size()-1; i>=0; i--) {

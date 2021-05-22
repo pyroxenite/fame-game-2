@@ -66,12 +66,12 @@ public class Rectangle {
     }
 
     public void draw() {
-        some_rect_drawing_function(
-            this.pos.getX() - this.w / 2, 
-            this.pos.getY() - this.h / 2, 
-            this.w, 
-            this.h
-        );
+        //some_rect_drawing_function(
+        //    this.pos.getX() - this.w / 2, 
+        //    this.pos.getY() - this.h / 2, 
+        //    this.w, 
+        //    this.h
+        //);
     }
 
     public void nextFrame() {

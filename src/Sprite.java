@@ -103,7 +103,7 @@ public class Sprite {
         return spr.getBoundary().intersects(this.getBoundary());
     }
 
-    public void draw(GraphicsContext gc, double t, Camera camera) {
+    public void draw(GraphicsContext gc, double t) {
         Image image;
         if (animated)
             image = getCurrentImage(t);

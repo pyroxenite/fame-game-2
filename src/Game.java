@@ -39,7 +39,7 @@ public class Game extends Application {
 
         canvas = new Canvas();
         root.getChildren().add(canvas);
- 
+
         // Bind canvas size to stack pane size.
         canvas.widthProperty().bind(root.widthProperty());
         canvas.heightProperty().bind(root.heightProperty());
@@ -54,26 +54,26 @@ public class Game extends Application {
         // background sound
         bgSound = new SoundBackground();
         bgSound.run();
-        
+
         // background
         ArrayList<Image> bgLayers = new ArrayList<>();
-        for (int i=1; i<=5; i++)
-            bgLayers.add(new Image("images/bglayers/hills/layer" + i + ".png"));
+        for (var i=1; i<=5; i++)
+            bgLayers.add(new Image("images/bglayers/hills2/layer" + i + ".png"));
 
         ParallaxSprite background = new ParallaxSprite(bgLayers);
         // ArrayList<ParallaxSprite> backgrounds = (new SpriteLoader()).loadBackground("Level 3");
         // ParallaxSprite background = backgrounds.get(0);
         // ParallaxSprite foreground = backgrounds.get(1);
-        background.setPos(0, -105);    
+        background.setPos(0, -225); // forest: -600, mountains: -133 
 
         // foreground
         ArrayList<Image> fgLayers = new ArrayList<>();
-        for (int i=0; i<1; i++)
-            fgLayers.add(new Image("images/bglayers/hills/layer" + i + ".png"));
+        for (var i=0; i<1; i++)
+            fgLayers.add(new Image("images/bglayers/hills2/layer" + i + ".png"));
 
         ParallaxSprite foreground = new ParallaxSprite(fgLayers);
-        foreground.setPos(0, -105);
-        foreground.setDepth(-1);
+        foreground.setPos(0, -225);
+        foreground.setDepth(-2);
 
         //player
         adventurer = new SpriteLoader().loadAnimation("adventurer");
@@ -115,9 +115,9 @@ public class Game extends Application {
         }
 
 
-        Sprite platformTest = new Sprite(new Image("images/platform.png"));
-        platformTest.setPos(200, 50);
-        sprites.add(platformTest);
+//        Sprite platformTest = new Sprite(new Image("images/platform.png"));
+//        platformTest.setPos(200, 50);
+//        sprites.add(platformTest);
 
         // controls
         playerController = new PlayerController(this, keyHandler);
@@ -149,13 +149,13 @@ public class Game extends Application {
                     obj.update();
                 }
 
-                background.draw(gc, t, camera);
+                background.draw(gc, camera);
 
                 for (Sprite s: sprites) {
-                    s.draw(gc, t, camera);
+                    s.draw(gc, t);
                 }
 
-                foreground.draw(gc, t, camera);
+                foreground.draw(gc, camera);
 
                 drawBlackRects(gc);
                 drawHealth(gc);
@@ -194,10 +194,26 @@ public class Game extends Application {
     }
 
     public void drawHealth(GraphicsContext gc) {
-        for (int i = 0; i < playerController.maxHealth(); i++) {
+        // make hearts responsive 
+        double width = gc.getCanvas().getWidth();
+        double height = gc.getCanvas().getHeight();
+        double scale = Math.min(width, height/9*16)/1600;
+
+        if (width/1200 < height/675) gc.setTransform(scale, 0, 0, scale, 0, (height-width/16*9)/2);
+        else gc.setTransform(scale, 0, 0, scale, (width-height/9*16)/2, 0);
+
+        // draw hearts
+        for (int i = 0; i < playerController.maxHealth()/2; i++) {
             final int HEART_SIZE = 50;
-            Image heart = new Image("images/ui/heart" + (i + 1 <= playerController.currentHealth() ? "full" : "empty") + ".png");
-            gc.drawImage(heart, i * HEART_SIZE * 1.25 + 30, 10, HEART_SIZE, HEART_SIZE);
+            
+            var heartVal = playerController.currentHealth()/2.0 - i - 0.5;
+            String name;
+            if (heartVal < 0) name = "empty";
+            else if (heartVal < 0.5) name = "half";
+            else name = "full";
+
+            Image heart = new Image("images/ui/heart/" + name + ".png");
+            gc.drawImage(heart, i * HEART_SIZE * 1.25 + 20, 20, HEART_SIZE, HEART_SIZE);
         }
     }
 
