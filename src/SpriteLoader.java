@@ -15,7 +15,7 @@ public class SpriteLoader {
         ArrayList<ParallaxSprite> ret = new ArrayList<>();
         ArrayList<Image> TEST = new ArrayList<>();
         ArrayList<Image> TEST1 = new ArrayList<>();
-
+        int yOffset = 0;
         // ArrayList<Image> TEST = new ArrayList<>();
         // System.out.println(TEST.size());
         
@@ -23,20 +23,20 @@ public class SpriteLoader {
             Object obj = parser.parse(new FileReader("config/levels.json"));
             JSONObject jsonObject = (JSONObject)obj;
             JSONObject spriteSheet = (JSONObject)jsonObject.get(levelName);
-            
+
             for (Object k : spriteSheet.keySet()) {
                 String key = (String)k;
                 if (key.equals("biomeName")) {
                     String biomeName = (String)spriteSheet.get(key);
                     File folder = new File("images/bglayers/" + biomeName);
                     int images = folder.listFiles().length;
-                    System.out.println(images);
                     for (int i = 1; i < images; i++) {
                         TEST.add(new Image("images/bglayers/" + biomeName + "/layer" + i + ".png"));
                     }
                     TEST1.add(new Image("images/bglayers/" + biomeName + "/layer0.png"));
                     break;
-                }
+                } 
+                else if (key.equals("yOffset")) { yOffset = ((Long) spriteSheet.get(key)).intValue(); }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,6 +44,8 @@ public class SpriteLoader {
 
         ParallaxSprite background = new ParallaxSprite(TEST);
         ParallaxSprite foreground = new ParallaxSprite(TEST1);
+        background.setPos(0, -yOffset);
+        foreground.setPos(0, -yOffset);
         ret.add(background);
         ret.add(foreground);
 

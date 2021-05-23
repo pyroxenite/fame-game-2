@@ -1,16 +1,19 @@
 {
     "Level 1": {
         "biomeName": "forest",
+        "yOffset": 600,
         "platforms": {},
         "mobs": {}
     },
     "Level 2": {
-        "biomeName": "mountain",
+        "biomeName": "mountain2",
+        "yOffset": 133,
         "platforms": {},
         "mobs": {}
     },
     "Level 3": {
-        "biomeName": "hills",
+        "biomeName": "hills2",
+        "yOffset": 225,
         "platforms": {},
         "mobs": {}
     }

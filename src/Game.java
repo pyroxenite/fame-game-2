@@ -56,23 +56,21 @@ public class Game extends Application {
         bgSound.run();
 
         // background
-        ArrayList<Image> bgLayers = new ArrayList<>();
-        for (var i=1; i<=5; i++)
-            bgLayers.add(new Image("images/bglayers/hills2/layer" + i + ".png"));
+        // ArrayList<Image> bgLayers = new ArrayList<>();
+        // for (var i=1; i<=5; i++)
+        //     bgLayers.add(new Image("images/bglayers/hills2/layer" + i + ".png"));
 
-        ParallaxSprite background = new ParallaxSprite(bgLayers);
-        // ArrayList<ParallaxSprite> backgrounds = (new SpriteLoader()).loadBackground("Level 3");
-        // ParallaxSprite background = backgrounds.get(0);
-        // ParallaxSprite foreground = backgrounds.get(1);
-        background.setPos(0, -225); // forest: -600, mountains: -133 
+        // ParallaxSprite background = new ParallaxSprite(bgLayers);
+        ArrayList<ParallaxSprite> backgrounds = (new SpriteLoader()).loadBackground("Level 1");
+        ParallaxSprite background = backgrounds.get(0);
+        ParallaxSprite foreground = backgrounds.get(1); 
 
         // foreground
-        ArrayList<Image> fgLayers = new ArrayList<>();
-        for (var i=0; i<1; i++)
-            fgLayers.add(new Image("images/bglayers/hills2/layer" + i + ".png"));
+        // ArrayList<Image> fgLayers = new ArrayList<>();
+        // for (var i=0; i<1; i++)
+        //     fgLayers.add(new Image("images/bglayers/hills2/layer" + i + ".png"));
 
-        ParallaxSprite foreground = new ParallaxSprite(fgLayers);
-        foreground.setPos(0, -225);
+        // ParallaxSprite foreground = new ParallaxSprite(fgLayers);
         foreground.setDepth(-2);
 
         //player
