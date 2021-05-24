@@ -61,7 +61,7 @@ public class Game extends Application {
         ArrayList<ParallaxSprite> backgrounds = (new SpriteLoader()).loadBackground("Level 1");
         background = backgrounds.get(0);
         foreground = backgrounds.get(1); 
-        foreground.setDepth(-2);
+        foreground.setDepth(-1);
 
         //player
         adventurer = new SpriteLoader().loadAnimation("adventurer");
@@ -79,6 +79,20 @@ public class Game extends Application {
         skeleton.setHostile(true);
         updatables.add(skeleton);
         //end skeleton
+
+        // LOL
+        // //skeleton
+        // for (var i=0; i<5; i++) {
+        //     Sprite skeletonSprite2 = new SpriteLoader().loadAnimation("skeleton");
+        //     skeletonSprite2.setPos(Math.random()*500, 115 - 100);
+        //     sprites.add(skeletonSprite2);
+        //     MobController skeleton2 = new MobController(this);
+        //     skeleton2.setTarget(skeletonSprite2);
+        //     skeleton2.setMaxHealth(50);
+        //     skeleton2.setHostile(true);
+        //     updatables.add(skeleton2);
+        // }
+        // //end skeleton
         
         {
         Sprite mushroom1 = new Sprite(new Image("images/mushrooms/type1-single-1.png"));
@@ -119,7 +133,7 @@ public class Game extends Application {
         camera.setScale(3);
         camera.setSpeed(0.05);
         camera.setTarget(adventurer);
-        camera.setPos(adventurer.getPos());
+        camera.setPos(adventurer.getPos().copy().add(new Vector(0, -100)));
         updatables.add(camera);
 
         final long startNanoTime = System.nanoTime();
@@ -173,7 +187,7 @@ public class Game extends Application {
         double width = gc.getCanvas().getWidth();
         double height = gc.getCanvas().getHeight();
         gc.setFill(Color.BLACK);
-        if (width/1200 < height/675) {
+        if (width/16 < height/9) {
             gc.fillRect(0, 0, width, (height-width/16*9)/2);
             gc.fillRect(0, height-(height-width/16*9)/2, width, (height-width/16*9)/2);
         } else {
@@ -188,7 +202,7 @@ public class Game extends Application {
         double height = gc.getCanvas().getHeight();
         double scale = Math.min(width, height/9*16)/1600;
 
-        if (width/1200 < height/675) gc.setTransform(scale, 0, 0, scale, 0, (height-width/16*9)/2);
+        if (width/16 < height/9) gc.setTransform(scale, 0, 0, scale, 0, (height-width/16*9)/2);
         else gc.setTransform(scale, 0, 0, scale, (width-height/9*16)/2, 0);
 
         // draw hearts

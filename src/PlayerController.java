@@ -49,12 +49,12 @@ public class PlayerController implements Updatable {
         vel.add(dir * magnitude * 2, -magnitude / 5);
     }
 
-    public int currentHealth() {return currentHealth;}
-    public int maxHealth() {return maxHealth;}
+    public int currentHealth() { return currentHealth; }
+    public int maxHealth() { return maxHealth; }
 
-    public boolean attacking() {return attacking;}
+    public boolean attacking() { return attacking; }
 
-    public int damage() {return damage;}
+    public int damage() { return damage; }
 
     public boolean onHitList(Sprite mob) {
         if (hitList.contains(mob)) {
@@ -132,7 +132,7 @@ public class PlayerController implements Updatable {
                 }
             }
 
-            if (keyHandler.isPressed("K")) {
+            if (keyHandler.isPressed("K") || keyHandler.isPressed("A")) {
                 if (!attacking) {
                     target.setImageSet("attack" + currentAttackAnim);
                     attacking = true;

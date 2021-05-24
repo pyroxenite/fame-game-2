@@ -40,7 +40,7 @@
         },
         "walk": {
             "path": "images/mobs/skeleton/walk/walk",
-            "delta": 0.2
+            "delta": 0.1
         },
         "run": {
             "path": "images/mobs/skeleton/walk/walk",
