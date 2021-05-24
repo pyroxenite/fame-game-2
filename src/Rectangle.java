@@ -2,12 +2,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Rectangle {
-    private Vector pos;
-    private Vector vel;
+    protected Vector pos;
+    protected Vector vel;
     private Vector nextPos;
     private Vector nextVel;
-    private double w;
-    private double h;
+    protected double w;
+    protected double h;
     private boolean isFixed = false;
 
     public Rectangle(double x, double y, double w, double h) {
@@ -69,6 +69,7 @@ public class Rectangle {
     }
 
     public void draw(GraphicsContext gc) {
+        gc.setLineWidth(0.2);
         if (isFixed)
             gc.setStroke(Color.WHITE);
         else

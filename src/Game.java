@@ -32,6 +32,7 @@ public class Game extends Application {
     public PlayerController playerController;
 
     PhysicsWorld physicsWorld;
+    Rectangle groundRect;
 
     @Override
     public void start(Stage stage) {
@@ -69,22 +70,26 @@ public class Game extends Application {
         physicsWorld = new PhysicsWorld();
         updatables.add(physicsWorld);
 
+        // ground
+        groundRect = new Rectangle(0, 115 + 50 + 14, 10e10, 100).setFixed();
+        physicsWorld.add(groundRect);
+
         //player
         adventurer = new SpriteLoader().loadAnimation("adventurer");
         adventurer.setPos(0, 115);
         sprites.add(adventurer);
         //end player
 
-        //skeleton
-        skeletonSprite = new SpriteLoader().loadAnimation("skeleton");
-        skeletonSprite.setPos(0, 115 - 100);
-        sprites.add(skeletonSprite);
-        MobController skeleton = new MobController(this);
-        skeleton.setTarget(skeletonSprite);
-        skeleton.setMaxHealth(50);
-        skeleton.setHostile(true);
-        updatables.add(skeleton);
-        //end skeleton
+        // //skeleton
+        // skeletonSprite = new SpriteLoader().loadAnimation("skeleton");
+        // skeletonSprite.setPos(0, 115 - 100);
+        // sprites.add(skeletonSprite);
+        // MobController skeleton = new MobController(this);
+        // skeleton.setTarget(skeletonSprite);
+        // skeleton.setMaxHealth(50);
+        // skeleton.setHostile(true);
+        // updatables.add(skeleton);
+        // //end skeleton
 
         // LOL
         //skeletons
@@ -128,12 +133,13 @@ public class Game extends Application {
 //        sprites.add(platformTest);
 
         // controls
-        playerController = new PlayerController(this, keyHandler);
-        playerController.setTarget(adventurer);
-        playerController.setActiveSpeed(0.8);
-        playerController.setFriction(0.3);
+        playerController = new PlayerController(this, keyHandler, adventurer);
+        //playerController.setActiveSpeed(0.8);
+        //playerController.setFriction(0.3);
         // playerController.setFriction(0.05);
         updatables.add(playerController);
+        physicsWorld.add(playerController);
+        physicsWorld.add(new Rectangle(adventurer.getPos().getX(), adventurer.getPos().getY() - 100, 30, 30));
         
         // camera
         camera.setScale(3);
@@ -143,8 +149,7 @@ public class Game extends Application {
         updatables.add(camera);
 
 
-        physicsWorld.add(new Rectangle(adventurer.getPos().getX(), adventurer.getPos().getY(), 50, 50).setFixed());
-        physicsWorld.add(new Rectangle(adventurer.getPos().getX(), adventurer.getPos().getY() - 100, 30, 30));
+        //physicsWorld.add(new Rectangle(adventurer.getPos().getX(), adventurer.getPos().getY() - 100, 30, 30));
 
         
 
@@ -161,6 +166,7 @@ public class Game extends Application {
 
                 // update everything
                 updatables.forEach(Updatable::update);
+                groundRect.getPos().setX(playerController.getPos().getX());
 
                 // draw background
                 background.draw(gc, camera);
@@ -175,9 +181,10 @@ public class Game extends Application {
                 physicsWorld.draw(gc);
 
 
+
                 drawBlackRects(gc);
-                gameController.draw(gc);
                 drawHealth(gc);
+                gameController.draw(gc);
             }
         }.start();
 
