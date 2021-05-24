@@ -26,7 +26,7 @@ class ParallaxSprite {
             double width = layers.get(0).getWidth();
             double viewWidth = 1200 / camera.getScale();
             for (int i=layers.size()-1; i>=0; i--) {
-                double x = pos.getX() + camera.getX()*(i+depth)/10;
+                double x = pos.getX() + camera.getX()*(i+depth)/Math.max(3, this.layers.size());
                 int shift = (int) ((camera.getX() + viewWidth/2 - x) / width);
                 
                 if (camera.getX() < 0)            

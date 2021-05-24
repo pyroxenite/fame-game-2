@@ -17,6 +17,7 @@ public class GameController implements Updatable {
     double alpha = 0;
     int delayCounterMax = 100;
     int delayCounter = -1;
+    int curentLevel = 1;
 
     String newLevelName;
 
@@ -38,7 +39,8 @@ public class GameController implements Updatable {
 
         if (keyHandler.isPressed("U")) {
             fade = 1;
-            newLevelName = "Level 2";
+            curentLevel = curentLevel%3 + 1;
+            newLevelName = "Level " + curentLevel;
         }
 
         if (loweringCamera) {
@@ -88,7 +90,7 @@ public class GameController implements Updatable {
                     ArrayList<ParallaxSprite> backgrounds = (new SpriteLoader()).loadBackground(newLevelName);
                     game.background = backgrounds.get(0);
                     game.foreground = backgrounds.get(1); 
-                    game.foreground.setDepth(-2);
+                    game.foreground.setDepth(-1);
                 } else if (delayCounter == delayCounterMax) {
                     delayCounter = -1;
                 }
@@ -114,9 +116,8 @@ public class GameController implements Updatable {
                         int numMob = ((Long) mobData.get("num")).intValue();
                         for (int i = 0; i < numMob; i++) {
                             Sprite sprite = new SpriteLoader().loadAnimation(mobName);
-                            MobController mob = new MobController(game);
+                            MobController mob = new MobController(game, sprite);
                             sprite.setPos(100, 115);
-                            mob.setTarget(sprite);
                             mob.setMaxHealth(((Long)mobData.get("health")).intValue());
                             mob.setHostile(true);
                             mob.setMoveSpeed(((Double)mobData.get("speed")));

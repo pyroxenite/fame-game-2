@@ -1,7 +1,7 @@
 {
     "adventurer": {
         "idle": {
-            "path": "images/adventurer/idle-0",
+            "path": "images/adventurer/idle-2-0",
             "delta": 0.2
         },
         "run": {
@@ -40,19 +40,19 @@
         },
         "walk": {
             "path": "images/mobs/skeleton/walk/walk",
-            "delta": 0.2
+            "delta": 0.1
         },
         "run": {
             "path": "images/mobs/skeleton/walk/walk",
-            "delta": 0.03
+            "delta": 0.05
         },
         "attack": {
             "path": "images/mobs/skeleton/attack/attack",
-            "delta": 0.05
+            "delta": 0.07
         },
         "stagger": {
             "path": "images/mobs/skeleton/damage/damage",
-            "delta": 0.05
+            "delta": 0.1
         }
     },
     "slime" : {

@@ -1,46 +1,34 @@
 import java.util.ArrayList;
 import javafx.scene.Scene;
 
-public class PlayerController implements Updatable {
+public class PlayerController extends PhysicsRectangle implements Updatable {
     private Game game;
     private Sprite target;
-    private Vector vel = new Vector();
-    private double activeSpeed = 1;
-    private double friction = 0;
     private KeyHandler keyHandler;
     private int maxHealth = 10, currentHealth = 10;
     private boolean attacking, staggered = false;
     private int currentAttackAnim = 1;
     private int damage = 1;
+    private double activeSpeed = 0.7;
     private ArrayList<Sprite> hitList = new ArrayList<Sprite>();
 
-
-    public PlayerController(Game game, KeyHandler keyHandler) {
+    public PlayerController(Game game, KeyHandler keyHandler, Sprite target) {
+        super(0, 0, 19, 32);
         this.game = game;
         this.keyHandler = keyHandler;
+        this.target = target; 
+        this.target.setPos(this.pos);
     }
 
     public Sprite getTarget() { return target; }
-    public void setTarget(Sprite target) { this.target = target; }
-
-    public double getActiveSpeed() { return activeSpeed; }
-    public void setActiveSpeed(double speed) { this.activeSpeed = speed; }
-
-    public Vector getVel() { return vel; }
-    public void setVel(Vector vel) { this.vel = vel; }
-
-    public double getFriction() { return friction; }
-
-    public void setFriction(double friction) { this.friction = friction; }
+    public void setTarget(Sprite target) { 
+        this.target = target; 
+    }
 
     public void incHealth(int inc) { 
         currentHealth = currentHealth + inc; 
         if (currentHealth > maxHealth) currentHealth = maxHealth;
         if (currentHealth < 0) currentHealth = 0;
-
-        if (inc < 0) {
-
-        }
     }
 
     public void knockBack(int magnitude, int dir) { 
@@ -49,12 +37,12 @@ public class PlayerController implements Updatable {
         vel.add(dir * magnitude * 2, -magnitude / 5);
     }
 
-    public int currentHealth() {return currentHealth;}
-    public int maxHealth() {return maxHealth;}
+    public int currentHealth() { return currentHealth; }
+    public int maxHealth() { return maxHealth; }
 
-    public boolean attacking() {return attacking;}
+    public boolean attacking() { return attacking; }
 
-    public int damage() {return damage;}
+    public int damage() { return damage; }
 
     public boolean onHitList(Sprite mob) {
         if (hitList.contains(mob)) {
@@ -66,12 +54,7 @@ public class PlayerController implements Updatable {
     }
 
     public void update() {
-        moveAccordingToKeysPressed();
-
-        vel.add(0, 0.15); // gravity
-        vel.scaleX(1 - friction); // friction with ground
-
-        target.getPos().add(vel);
+        
 
         if (!attacking && !staggered) {
             if (Math.abs(vel.getX()) > .1) {
@@ -89,12 +72,16 @@ public class PlayerController implements Updatable {
             }
         }
 
-        if (target.getPos().getY() > 115) { // 115
-            target.getPos().setY(115);
-            if (vel.getY() > 1)
-                game.camera.hitGround(vel.getY()*5);
-            vel.setY(0);
-        }
+        moveAccordingToKeysPressed();
+
+        vel.scaleX(0.8);
+
+        //if (target.getPos().getY() > 115) { // 115
+        //    target.getPos().setY(115);
+        //    if (vel.getY() > 1)
+        //        game.camera.hitGround(vel.getY()*5);
+        //    vel.setY(0);
+        //}
 
          //reset attacking timer
         if (attacking && target.getCurrentFrameNumber() == target.getCurrentImageSetCount() - 1) {
@@ -105,6 +92,8 @@ public class PlayerController implements Updatable {
         if (staggered && target.getCurrentFrameNumber() == 2) {
             staggered = false;
         }
+
+        this.target.setPos(this.pos);
     }
 
     private void moveAccordingToKeysPressed() {
@@ -121,8 +110,8 @@ public class PlayerController implements Updatable {
                 }
                 
                 if (keyHandler.isPressed("UP") || keyHandler.isPressed("W")) {
-                    if (Math.abs(vel.getY()) < 0.1) {
-                        vel.add(0, -4); 
+                    if (Math.abs(vel.getY()) < 0.01) {
+                        vel.add(0, -5); 
                     }
                     keyHandler.preventRepeat("UP");
                 }
@@ -132,7 +121,7 @@ public class PlayerController implements Updatable {
                 }
             }
 
-            if (keyHandler.isPressed("K")) {
+            if (keyHandler.isPressed("K") || keyHandler.isPressed("Q")) {
                 if (!attacking) {
                     target.setImageSet("attack" + currentAttackAnim);
                     attacking = true;

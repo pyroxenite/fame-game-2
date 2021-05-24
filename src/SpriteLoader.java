@@ -13,11 +13,11 @@ public class SpriteLoader {
 
     public ArrayList<ParallaxSprite> loadBackground(String levelName) {
         ArrayList<ParallaxSprite> ret = new ArrayList<>();
-        ArrayList<Image> TEST = new ArrayList<>();
-        ArrayList<Image> TEST1 = new ArrayList<>();
+        ArrayList<Image> backgroundImages = new ArrayList<>();
+        ArrayList<Image> foregroundImages = new ArrayList<>();
         int yOffset = 0;
-        // ArrayList<Image> TEST = new ArrayList<>();
-        // System.out.println(TEST.size());
+        // ArrayList<Image> backgroundImages = new ArrayList<>();
+        // System.out.println(backgroundImages.size());
         
         try {
             Object obj = parser.parse(new FileReader("config/levels.json"));
@@ -29,21 +29,23 @@ public class SpriteLoader {
                 if (key.equals("biomeName")) {
                     String biomeName = (String)spriteSheet.get(key);
                     File folder = new File("images/bglayers/" + biomeName);
-                    int images = folder.listFiles().length;
-                    for (int i = 1; i < images; i++) {
-                        TEST.add(new Image("images/bglayers/" + biomeName + "/layer" + i + ".png"));
+                    int numImages = folder.listFiles((dir, name) -> name.substring(0, 5).equals("layer")).length;
+                    for (int i = 1; i < numImages; i++) {
+                        backgroundImages.add(new Image("images/bglayers/" + biomeName + "/layer" + i + ".png"));
                     }
-                    TEST1.add(new Image("images/bglayers/" + biomeName + "/layer0.png"));
+                    foregroundImages.add(new Image("images/bglayers/" + biomeName + "/layer0.png"));
                     break;
                 } 
-                else if (key.equals("yOffset")) { yOffset = ((Long) spriteSheet.get(key)).intValue(); }
+                else if (key.equals("yOffset")) { 
+                    yOffset = ((Long) spriteSheet.get(key)).intValue(); 
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        ParallaxSprite background = new ParallaxSprite(TEST);
-        ParallaxSprite foreground = new ParallaxSprite(TEST1);
+        ParallaxSprite background = new ParallaxSprite(backgroundImages);
+        ParallaxSprite foreground = new ParallaxSprite(foregroundImages);
         background.setPos(0, -yOffset);
         foreground.setPos(0, -yOffset);
         ret.add(background);

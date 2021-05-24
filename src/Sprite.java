@@ -57,6 +57,9 @@ public class Sprite {
 
     public Vector getPos() { return pos; }
 
+    public void setPos(Vector pos) {
+        this.pos = pos;
+    }
     public void setPos(double x, double y) {
         pos.setX(x);
         pos.setY(y);

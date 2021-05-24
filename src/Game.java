@@ -39,6 +39,8 @@ public class Game extends Application {
         sprites.add(sprite);
         updatables.add(mob);
     }
+    PhysicsWorld physicsWorld;
+    PhysicsRectangle groundRect;
 
     @Override
     public void start(Stage stage) {
@@ -70,40 +72,21 @@ public class Game extends Application {
         ArrayList<ParallaxSprite> backgrounds = (new SpriteLoader()).loadBackground("Level 1");
         background = backgrounds.get(0);
         foreground = backgrounds.get(1); 
-        foreground.setDepth(-2);
+        foreground.setDepth(-1);
+
+        // physics
+        physicsWorld = new PhysicsWorld();
+        updatables.add(physicsWorld);
+
+        // ground
+        groundRect = new PhysicsRectangle(0, 115 + 50 + 14, 10e10, 100).setFixed();
+        physicsWorld.add(groundRect);
 
         //player
         adventurer = new SpriteLoader().loadAnimation("adventurer");
         adventurer.setPos(0, 115);
         sprites.add(adventurer);
         //end player
-
-        //skeleton
-        // for (int i = 0; i < 5; i ++) {
-        //     Sprite skeletonSprite = new SpriteLoader().loadAnimation("skeleton");
-        //     MobController skeleton = new MobController(this);
-
-        //     skeletonSprite.setPos(25 * i, 115 - 100);
-        //     sprites.add(skeletonSprite);
-
-        //     skeleton.setTarget(skeletonSprite);
-        //     skeleton.setMaxHealth(50);
-        //     skeleton.setHostile(true);
-        //     updatables.add(skeleton);
-        // }
-        //end skeleton
-
-        //slime
-        // Sprite slimeSprite = new SpriteLoader().loadAnimation("slime");
-        // slimeSprite.setPos(100, 115);
-        // sprites.add(slimeSprite);
-        // MobController slime = new MobController(this);
-        // slime.setTarget(slimeSprite);
-        // slime.setMaxHealth(50);
-        // slime.setHostile(true);
-        // slime.setMoveSpeed(0.3);
-        // updatables.add(slime);
-        //end slime
 
         gameController.changeLevels("Level 1");
         
@@ -135,19 +118,27 @@ public class Game extends Application {
 //        sprites.add(platformTest);
 
         // controls
-        playerController = new PlayerController(this, keyHandler);
-        playerController.setTarget(adventurer);
-        playerController.setActiveSpeed(0.8);
-        playerController.setFriction(0.3);
+        playerController = new PlayerController(this, keyHandler, adventurer);
+        //playerController.setActiveSpeed(0.8);
+        //playerController.setFriction(0.3);
         // playerController.setFriction(0.05);
         updatables.add(playerController);
+        physicsWorld.add(playerController);
+        physicsWorld.add(new PhysicsRectangle(adventurer.getPos().getX(), adventurer.getPos().getY() - 100, 30, 30));
+        physicsWorld.add(new PhysicsRectangle(adventurer.getPos().getX() + 300, adventurer.getPos().getY() + 114 - 20, 200, 60).setFixed());
+        physicsWorld.add(new PhysicsRectangle(adventurer.getPos().getX() - 100, adventurer.getPos().getY() + 114, 50, 50).setFixed());
         
         // camera
         camera.setScale(3);
         camera.setSpeed(0.05);
         camera.setTarget(adventurer);
-        camera.setPos(adventurer.getPos());
+        camera.setPos(adventurer.getPos().copy().add(new Vector(0, -100)));
         updatables.add(camera);
+
+
+        //physicsWorld.add(new Rectangle(adventurer.getPos().getX(), adventurer.getPos().getY() - 100, 30, 30));
+
+        
 
         final long startNanoTime = System.nanoTime();
 
@@ -160,21 +151,27 @@ public class Game extends Application {
                 adjustCanvasToWindowSize(gc);
                 camera.applyTransform(gc);
 
-                for (Updatable obj: updatables) {
-                    obj.update();
-                }
+                // update everything
+                updatables.forEach(Updatable::update);
+                groundRect.getPos().setX(playerController.getPos().getX());
 
+                // draw background
                 background.draw(gc, camera);
 
-                for (Sprite s: sprites) {
-                    s.draw(gc, t);
-                }
+                // draw sprites
+                sprites.forEach(s -> s.draw(gc, t));
 
+                // draw foreground
                 foreground.draw(gc, camera);
 
+                // draw physics debug graphics
+                physicsWorld.draw(gc);
+
+
+
                 drawBlackRects(gc);
-                gameController.draw(gc);
                 drawHealth(gc);
+                gameController.draw(gc);
             }
         }.start();
 
@@ -200,7 +197,7 @@ public class Game extends Application {
         double width = gc.getCanvas().getWidth();
         double height = gc.getCanvas().getHeight();
         gc.setFill(Color.BLACK);
-        if (width/1200 < height/675) {
+        if (width/16 < height/9) {
             gc.fillRect(0, 0, width, (height-width/16*9)/2);
             gc.fillRect(0, height-(height-width/16*9)/2, width, (height-width/16*9)/2);
         } else {
@@ -215,14 +212,14 @@ public class Game extends Application {
         double height = gc.getCanvas().getHeight();
         double scale = Math.min(width, height/9*16)/1600;
 
-        if (width/1200 < height/675) gc.setTransform(scale, 0, 0, scale, 0, (height-width/16*9)/2);
+        if (width/16 < height/9) gc.setTransform(scale, 0, 0, scale, 0, (height-width/16*9)/2);
         else gc.setTransform(scale, 0, 0, scale, (width-height/9*16)/2, 0);
 
         // draw hearts
         for (int i = 0; i < playerController.maxHealth()/2; i++) {
             final int HEART_SIZE = 50;
             
-            var heartVal = playerController.currentHealth()/2.0 - i - 0.5;
+            double heartVal = playerController.currentHealth()/2.0 - i - 0.5;
             String name;
             if (heartVal < 0) name = "empty";
             else if (heartVal < 0.5) name = "half";
