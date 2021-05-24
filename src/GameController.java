@@ -3,6 +3,11 @@ import javafx.scene.canvas.*;
 import javafx.application.Application;
 import java.util.ArrayList;
 
+import java.io.*;
+import java.util.*;
+import org.json.simple.*;
+import org.json.simple.parser.*;
+
 public class GameController implements Updatable {
     Game game;
     KeyHandler keyHandler;
@@ -14,6 +19,8 @@ public class GameController implements Updatable {
     int delayCounter = -1;
 
     String newLevelName;
+
+    JSONParser parser = new JSONParser();
 
     public GameController(Game game) {
         this.game = game;
@@ -90,6 +97,42 @@ public class GameController implements Updatable {
     }
 
     public void changeLevels(String levelName) {
+        game.clearLevel();
+
+        try {
+            Object obj = parser.parse(new FileReader("config/levels.json"));
+            JSONObject jsonObject = (JSONObject)obj;
+            JSONObject levelData = (JSONObject)jsonObject.get(levelName);
+
+            for (Object k : levelData.keySet()) {
+                String name = (String)k;
+                if (name.equals("mobs")) {
+                    JSONObject mobs = (JSONObject)levelData.get(name);
+                    for (Object v : mobs.keySet()) {
+                        String mobName = (String)v;
+                        JSONObject mobData = (JSONObject)mobs.get(mobName);
+                        int numMob = ((Long) mobData.get("num")).intValue();
+                        for (int i = 0; i < numMob; i++) {
+                            Sprite sprite = new SpriteLoader().loadAnimation(mobName);
+                            MobController mob = new MobController(game);
+                            sprite.setPos(100, 115);
+                            mob.setTarget(sprite);
+                            mob.setMaxHealth(((Long)mobData.get("health")).intValue());
+                            mob.setHostile(true);
+                            mob.setMoveSpeed(((Double)mobData.get("speed")));
+                            mob.setDmgFrames(
+                                ((Long)mobData.get("frameStart")).intValue(), 
+                                ((Long)mobData.get("frameEnd")).intValue()
+                            );
+                            game.addMob(sprite, mob);
+                        }
+                    }
+                }
+            }   
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         fade = 1;
         newLevelName = levelName;
     }

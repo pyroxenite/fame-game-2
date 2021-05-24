@@ -55,6 +55,28 @@
             "delta": 0.05
         }
     },
+    "slime" : {
+        "idle": {
+            "path": "images/mobs/slime/slime-idle-",
+            "delta": 0.2
+        },
+        "walk": {
+            "path": "images/mobs/slime/slime-move-",
+            "delta": 0.2
+        },
+        "run": {
+            "path": "images/mobs/slime/slime-move-",
+            "delta": 0.1
+        },
+        "attack": {
+            "path": "images/mobs/slime/slime-attack-",
+            "delta": 0.1
+        },
+        "stagger": {
+            "path": "images/mobs/slime/slime-hurt-",
+            "delta": 0.1
+        }
+    },
     "environment": {
         "mushroom1": "images/mushrooms/type1-single-1.png",
         "mushroom2": "images/mushrooms/type1-double-1.png",

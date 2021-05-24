@@ -17,6 +17,8 @@ public class MobController implements Updatable {
     private static Game game;
     private boolean hasHitPlayer, hasPlayerHit, staggered;
 
+    private int dmgFrameEnd, dmgFrameStart;
+
     private Random rand = new Random();
     private int targX = 0;
 
@@ -37,12 +39,21 @@ public class MobController implements Updatable {
         this.maxHealth = maxHealth;
     }
 
+    public void setMoveSpeed(double speed) {
+        this.moveSpeed = speed;
+    }
+
     public void setCurrentHealth(int currentHealth) {
         this.currentHealth = currentHealth;
     }
 
     public void setTarget(Sprite target) {
         this.target = target;
+    }
+
+    public void setDmgFrames(int start, int end) {
+        this.dmgFrameStart = start;
+        this.dmgFrameEnd = end;
     }
 
     //FSM state and transition implementation
@@ -73,7 +84,7 @@ public class MobController implements Updatable {
             @Override
             public BehaviorState nextState(Sprite mob, Sprite player) { 
                 double dist = Math.abs(player.getPos().getX() - mob.getPos().getX());
-                if (dist < attackRange || mob.getCurrentFrameNumber() != 17)
+                if (dist < attackRange)
                     return BehaviorState.ATTACK;
                 else
                     return BehaviorState.CHASE;
@@ -147,7 +158,7 @@ public class MobController implements Updatable {
                     vel.setX(0);
                     target.setImageSet("attack");
                     if (target.getCurrentFrameNumber() == 1) hasHitPlayer = false; //reset hit player flag on new anim cycle
-                    if (target.getCurrentFrameNumber() >= 8) { //hit frames
+                    if (target.getCurrentFrameNumber() >= 3) { //hit frames
                         if (!hasHitPlayer && target.intersects(adventurer)) { //has hit
                             game.camera.hitSide(10 * target.getDirection());
                             game.playerController.incHealth(-1);

@@ -3,7 +3,24 @@
         "biomeName": "forest",
         "yOffset": 600,
         "platforms": {},
-        "mobs": {}
+        "mobs": {
+            "skeleton": {
+                "num": 5,
+                "health": 50,
+                "damage": 1,
+                "speed": 0.6,
+                "frameStart": 6,
+                "frameEnd": 11
+            },
+            "slime": {
+                "num": 5,
+                "health": 50,
+                "damage": 1,
+                "speed": 0.6,
+                "frameStart": 3,
+                "frameEnd": 4
+            }
+        }
     },
     "Level 2": {
         "biomeName": "mountain2",

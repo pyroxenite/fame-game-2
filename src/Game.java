@@ -27,9 +27,18 @@ public class Game extends Application {
     ArrayList<Updatable> updatables = new ArrayList<>();
 
     Sprite adventurer;
-    Sprite skeletonSprite;
 
     public PlayerController playerController;
+
+    public void clearLevel() {
+        sprites.clear();
+        sprites.add(adventurer);
+    };
+
+    public void addMob(Sprite sprite, MobController mob) {
+        sprites.add(sprite);
+        updatables.add(mob);
+    }
 
     @Override
     public void start(Stage stage) {
@@ -70,15 +79,33 @@ public class Game extends Application {
         //end player
 
         //skeleton
-        skeletonSprite = new SpriteLoader().loadAnimation("skeleton");
-        skeletonSprite.setPos(0, 115 - 100);
-        sprites.add(skeletonSprite);
-        MobController skeleton = new MobController(this);
-        skeleton.setTarget(skeletonSprite);
-        skeleton.setMaxHealth(50);
-        skeleton.setHostile(true);
-        updatables.add(skeleton);
+        // for (int i = 0; i < 5; i ++) {
+        //     Sprite skeletonSprite = new SpriteLoader().loadAnimation("skeleton");
+        //     MobController skeleton = new MobController(this);
+
+        //     skeletonSprite.setPos(25 * i, 115 - 100);
+        //     sprites.add(skeletonSprite);
+
+        //     skeleton.setTarget(skeletonSprite);
+        //     skeleton.setMaxHealth(50);
+        //     skeleton.setHostile(true);
+        //     updatables.add(skeleton);
+        // }
         //end skeleton
+
+        //slime
+        // Sprite slimeSprite = new SpriteLoader().loadAnimation("slime");
+        // slimeSprite.setPos(100, 115);
+        // sprites.add(slimeSprite);
+        // MobController slime = new MobController(this);
+        // slime.setTarget(slimeSprite);
+        // slime.setMaxHealth(50);
+        // slime.setHostile(true);
+        // slime.setMoveSpeed(0.3);
+        // updatables.add(slime);
+        //end slime
+
+        gameController.changeLevels("Level 1");
         
         {
         Sprite mushroom1 = new Sprite(new Image("images/mushrooms/type1-single-1.png"));
