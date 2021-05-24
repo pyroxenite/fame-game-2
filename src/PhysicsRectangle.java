@@ -1,7 +1,7 @@
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Rectangle {
+public class PhysicsRectangle {
     protected Vector pos;
     protected Vector vel;
     private Vector nextPos;
@@ -9,8 +9,9 @@ public class Rectangle {
     protected double w;
     protected double h;
     private boolean isFixed = false;
+    private boolean isEntity = true;
 
-    public Rectangle(double x, double y, double w, double h) {
+    public PhysicsRectangle(double x, double y, double w, double h) {
         pos = new Vector(x, y);
         nextPos = new Vector(x, y);
         vel = new Vector(0, 0);
@@ -55,10 +56,19 @@ public class Rectangle {
         return isFixed;
     }
 
-    public Rectangle setFixed() {
+    public PhysicsRectangle setFixed() {
         isFixed = true;
         return this;
     }
+
+    public boolean getIsEntity() {
+        return isEntity;
+    }
+
+    public PhysicsRectangle setIsEntity(boolean isEntity) {
+        this.isEntity = isEntity;
+        return this;
+    } 
 
     public double getWidth() {
         return w;

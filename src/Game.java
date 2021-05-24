@@ -32,7 +32,7 @@ public class Game extends Application {
     public PlayerController playerController;
 
     PhysicsWorld physicsWorld;
-    Rectangle groundRect;
+    PhysicsRectangle groundRect;
 
     @Override
     public void start(Stage stage) {
@@ -71,7 +71,7 @@ public class Game extends Application {
         updatables.add(physicsWorld);
 
         // ground
-        groundRect = new Rectangle(0, 115 + 50 + 14, 10e10, 100).setFixed();
+        groundRect = new PhysicsRectangle(0, 115 + 50 + 14, 10e10, 100).setFixed();
         physicsWorld.add(groundRect);
 
         //player
@@ -80,16 +80,15 @@ public class Game extends Application {
         sprites.add(adventurer);
         //end player
 
-        // //skeleton
-        // skeletonSprite = new SpriteLoader().loadAnimation("skeleton");
-        // skeletonSprite.setPos(0, 115 - 100);
-        // sprites.add(skeletonSprite);
-        // MobController skeleton = new MobController(this);
-        // skeleton.setTarget(skeletonSprite);
-        // skeleton.setMaxHealth(50);
-        // skeleton.setHostile(true);
-        // updatables.add(skeleton);
-        // //end skeleton
+        //skeleton
+        skeletonSprite = new SpriteLoader().loadAnimation("skeleton");
+        skeletonSprite.setPos(0, 115 - 100);
+        sprites.add(skeletonSprite);
+        MobController skeleton = new MobController(this, skeletonSprite);
+        skeleton.setMaxHealth(50);
+        updatables.add(skeleton);
+        physicsWorld.add(skeleton);
+        //end skeleton
 
         // LOL
         //skeletons
@@ -139,8 +138,9 @@ public class Game extends Application {
         // playerController.setFriction(0.05);
         updatables.add(playerController);
         physicsWorld.add(playerController);
-        physicsWorld.add(new Rectangle(adventurer.getPos().getX(), adventurer.getPos().getY() - 100, 30, 30));
-        physicsWorld.add(new Rectangle(adventurer.getPos().getX() + 200, adventurer.getPos().getY() + 114, 30, 30).setFixed());
+        physicsWorld.add(new PhysicsRectangle(adventurer.getPos().getX(), adventurer.getPos().getY() - 100, 30, 30));
+        physicsWorld.add(new PhysicsRectangle(adventurer.getPos().getX() + 300, adventurer.getPos().getY() + 114 - 20, 200, 60).setFixed());
+        physicsWorld.add(new PhysicsRectangle(adventurer.getPos().getX() - 100, adventurer.getPos().getY() + 114, 50, 50).setFixed());
         
         // camera
         camera.setScale(3);

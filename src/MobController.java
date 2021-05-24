@@ -1,32 +1,31 @@
 import java.util.*;
 import java.util.Random;
 
-public class MobController implements Updatable {
+public class MobController extends PhysicsRectangle implements Updatable {
 
     private Sprite target;
     private Sprite adventurer;
-    private Vector vel = new Vector();
-    private Vector acc = new Vector();
-    private Boolean hostile;
+    private Boolean hostile = true;
     private int maxHealth;
     private int currentHealth;
-    private double moveSpeed = 0.6;
+    private double moveSpeed = 0.4;
     private double friction = .05;
     private static double detectionRange = 150;
     private static double attackRange = 25;
-    private static Game game;
-    private boolean hasHitPlayer, hasPlayerHit, staggered;
+    private Game game;
+    private boolean hasHitPlayer, staggered;
 
     private Random rand = new Random();
     private int targX = 0;
 
-    public MobController(Game game) {
+    public MobController(Game game, Sprite target) {
+        super(0, 0, 19, 32);
         this.game = game;
         this.hostile = false;
         this.maxHealth = 50;
         this.currentHealth = maxHealth;
-        this.target = null;
         this.adventurer = game.adventurer;
+        this.target = target;
     }
 
     public void setHostile(boolean isHostile) {
@@ -87,10 +86,6 @@ public class MobController implements Updatable {
     private BehaviorState prevBehaviorState = currBehaviorState;
 
     public void update() {
-        vel.add(0, 0.15); // gravity
-        vel.scaleX(1 - friction); // friction with ground
-        target.getPos().add(vel);
-
         if (staggered && target.getCurrentFrameNumber() == 5) staggered = false;
 
         //handle hit on mob from player
@@ -108,62 +103,67 @@ public class MobController implements Updatable {
             target.setImageSet("stagger");
         }
 
-        //keep entity above ground
-        if (target.getPos().getY() > 115) {
-            target.getPos().setY(115);
-            if (vel.getY() > 1)
-                game.camera.hitGround(vel.getY()*5);
-            vel.setY(0);
+        this.target.setPos(this.pos);
+
+        if (staggered)
+            return;
+
+
+        if (vel.getX() > .5) {
+            target.setFlipped(false);
+        } else if (vel.getX() < -.5) {
+            target.setFlipped(true);
         }
 
-        if (!staggered) {
-            if (vel.getX() > .5) {
-                target.setFlipped(false);
-            } else if (vel.getX() < -.5) {
-                target.setFlipped(true);
-            }
+        currBehaviorState = currBehaviorState.nextState(target, adventurer);
 
-            currBehaviorState = currBehaviorState.nextState(target, adventurer);
-
-            //freq used vars for fsm functions
-            double newPlayerX = adventurer.getPos().getX();
-            double newTargetX = target.getPos().getX();
-            int dir = 1;
-            switch (currBehaviorState) {
-                case PATROL: //randomly move left or right
+        //freq used vars for fsm functions
+        double newPlayerX = adventurer.getPos().getX();
+        double newTargetX = target.getPos().getX();
+        int dir = 1;
+        switch (currBehaviorState) {
+            case PATROL: //randomly move left or right
+                if (Math.abs(vel.getX()) > .1) {
                     target.setImageSet("walk");
-                    if (Math.abs(targX - newTargetX) < 1)
-                        targX = targX + (rand.nextDouble() < .5 ? 100 : -100);
-                    dir = newTargetX > targX ? -1 : 1;
-                    vel.setX(dir * moveSpeed);
-                    break;
-                case CHASE: //move towards player
-                    target.setImageSet("run");
-                    dir = newTargetX > newPlayerX ? -2 : 2;
-                    vel.setX(dir * moveSpeed);
-                    break;
-                case ATTACK: //stop movement
-                    if (prevBehaviorState != BehaviorState.ATTACK) hasHitPlayer = false; //reset has hit player flag on state change
-                    vel.setX(0);
-                    target.setImageSet("attack");
-                    if (target.getCurrentFrameNumber() == 1) hasHitPlayer = false; //reset hit player flag on new anim cycle
-                    if (target.getCurrentFrameNumber() >= 8) { //hit frames
-                        if (!hasHitPlayer && target.intersects(adventurer)) { //has hit
-                            game.camera.hitSide(10 * target.getDirection());
-                            game.playerController.incHealth(-1);
-                            game.playerController.knockBack(10, (int) -Math.signum(target.getPos().getX() - adventurer.getPos().getX()));
-                            hasHitPlayer = true; //set hit player flag
-                        }
-                    }
-                    break;
-                default:
+                } else {
                     target.setImageSet("idle");
-                    break;
-            }
-
-            //advance FSM to next state
-            prevBehaviorState = currBehaviorState;
+                }
+                if (Math.abs(targX - newTargetX) < 1)
+                    targX = targX + (rand.nextDouble() < .5 ? 100 : -100);
+                dir = newTargetX > targX ? -1 : 1;
+                vel.setX(dir * moveSpeed);
+                break;
+            case CHASE: //move towards player
+                if (Math.abs(vel.getX()) > .1) {
+                    target.setImageSet("run");
+                } else {
+                    target.setImageSet("idle");
+                }
+                dir = newTargetX > newPlayerX ? -2 : 2;
+                vel.setX(dir * moveSpeed);
+                break;
+            case ATTACK: //stop movement
+                if (prevBehaviorState != BehaviorState.ATTACK) hasHitPlayer = false; //reset has hit player flag on state change
+                vel.setX(0);
+                target.setImageSet("attack");
+                if (target.getCurrentFrameNumber() == 1) hasHitPlayer = false; //reset hit player flag on new anim cycle
+                if (target.getCurrentFrameNumber() >= 8) { //hit frames
+                    if (!hasHitPlayer && target.intersects(adventurer)) { //has hit
+                        game.camera.hitSide(10 * target.getDirection());
+                        game.playerController.incHealth(-1);
+                        game.playerController.knockBack(10, (int) -Math.signum(target.getPos().getX() - adventurer.getPos().getX()));
+                        hasHitPlayer = true; //set hit player flag
+                    }
+                }
+                break;
+            default:
+                target.setImageSet("idle");
+                break;
         }
+
+        //advance FSM to next state
+        prevBehaviorState = currBehaviorState;
+        
     }
 
     public void setSprite(Sprite s) { this.target = s; }

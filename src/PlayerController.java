@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import javafx.scene.Scene;
 
-public class PlayerController extends Rectangle implements Updatable {
+public class PlayerController extends PhysicsRectangle implements Updatable {
     private Game game;
     private Sprite target;
     private KeyHandler keyHandler;
@@ -9,11 +9,11 @@ public class PlayerController extends Rectangle implements Updatable {
     private boolean attacking, staggered = false;
     private int currentAttackAnim = 1;
     private int damage = 1;
-    private double activeSpeed = 1;
+    private double activeSpeed = 0.7;
     private ArrayList<Sprite> hitList = new ArrayList<Sprite>();
 
     public PlayerController(Game game, KeyHandler keyHandler, Sprite target) {
-        super(0, 0, 19, 28);
+        super(0, 0, 19, 32);
         this.game = game;
         this.keyHandler = keyHandler;
         this.target = target; 
@@ -54,7 +54,7 @@ public class PlayerController extends Rectangle implements Updatable {
     }
 
     public void update() {
-        moveAccordingToKeysPressed();
+        
 
         if (!attacking && !staggered) {
             if (Math.abs(vel.getX()) > .1) {
@@ -71,6 +71,8 @@ public class PlayerController extends Rectangle implements Updatable {
                 }
             }
         }
+
+        moveAccordingToKeysPressed();
 
         vel.scaleX(0.8);
 
@@ -108,8 +110,8 @@ public class PlayerController extends Rectangle implements Updatable {
                 }
                 
                 if (keyHandler.isPressed("UP") || keyHandler.isPressed("W")) {
-                    if (Math.abs(vel.getY()) < 0.1) {
-                        vel.add(0, -4); 
+                    if (Math.abs(vel.getY()) < 0.01) {
+                        vel.add(0, -5); 
                     }
                     keyHandler.preventRepeat("UP");
                 }
@@ -119,7 +121,7 @@ public class PlayerController extends Rectangle implements Updatable {
                 }
             }
 
-            if (keyHandler.isPressed("K") || keyHandler.isPressed("")) {
+            if (keyHandler.isPressed("K") || keyHandler.isPressed("Q")) {
                 if (!attacking) {
                     target.setImageSet("attack" + currentAttackAnim);
                     attacking = true;
