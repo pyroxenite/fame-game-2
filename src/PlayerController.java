@@ -13,7 +13,7 @@ public class PlayerController extends PhysicsRectangle implements Updatable {
     private ArrayList<Sprite> hitList = new ArrayList<Sprite>();
 
     public PlayerController(Game game, KeyHandler keyHandler, Sprite target) {
-        super(0, 0, 19, 32);
+        super(0, 0, 18, 24);
         this.game = game;
         this.keyHandler = keyHandler;
         this.target = target; 
@@ -93,7 +93,7 @@ public class PlayerController extends PhysicsRectangle implements Updatable {
             staggered = false;
         }
 
-        this.target.setPos(this.pos);
+        this.target.setPos(this.pos.copy().add(0, -5));
     }
 
     private void moveAccordingToKeysPressed() {

@@ -84,24 +84,21 @@ public class Game extends Application {
         skeletonSprite = new SpriteLoader().loadAnimation("skeleton");
         skeletonSprite.setPos(0, 115 - 100);
         sprites.add(skeletonSprite);
-        MobController skeleton = new MobController(this, skeletonSprite);
-        skeleton.setMaxHealth(50);
+        MobController skeleton = new MobController(this, skeletonSprite, 3);
         updatables.add(skeleton);
         physicsWorld.add(skeleton);
         //end skeleton
 
         // LOL
         //skeletons
-        // for (var i=0; i<5; i++) {
-        //     Sprite skeletonSprite2 = new SpriteLoader().loadAnimation("skeleton");
-        //     skeletonSprite2.setPos(Math.random()*500, 115 - 100);
-        //     sprites.add(skeletonSprite2);
-        //     MobController skeleton2 = new MobController(this);
-        //     skeleton2.setTarget(skeletonSprite2);
-        //     skeleton2.setMaxHealth(50);
-        //     skeleton2.setHostile(true);
-        //     updatables.add(skeleton2);
-        // }
+        for (var i=0; i<5; i++) {
+            Sprite skeletonSprite2 = new SpriteLoader().loadAnimation("skeleton");
+            skeletonSprite2.setPos(Math.random()*500, 115 - 100);
+            sprites.add(skeletonSprite2);
+            MobController skeleton2 = new MobController(this, skeletonSprite2, 3);
+            updatables.add(skeleton2);
+            physicsWorld.add(skeleton2);
+        }
         //end skeletons
         
         {
