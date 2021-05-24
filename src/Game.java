@@ -140,6 +140,7 @@ public class Game extends Application {
         updatables.add(playerController);
         physicsWorld.add(playerController);
         physicsWorld.add(new Rectangle(adventurer.getPos().getX(), adventurer.getPos().getY() - 100, 30, 30));
+        physicsWorld.add(new Rectangle(adventurer.getPos().getX() + 200, adventurer.getPos().getY() + 114, 30, 30).setFixed());
         
         // camera
         camera.setScale(3);

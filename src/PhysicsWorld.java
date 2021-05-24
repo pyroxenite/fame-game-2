@@ -49,17 +49,17 @@ public class PhysicsWorld implements Updatable {
 
     if (overlapping && !r1.isFixed()) {
       double cond = r1.isFixed() ? 1 : 0;
-      //var relativeSpeed = r1.getVel().copy().sub(r2.getVel()).scale(0.9);
-      //r1.getVel() 
+      var relativeSpeed = r1.getVel().copy().sub(r2.getVel()).scale(0.9);
+      //r1.getVel().setX(-relativeSpeed.getX());
       if (left > right && left > top && left > bottom) {
         r1.getNextPos().setX(r1.getPos().getX() + left / 2 + cond * left / 2);
-        //r1.getNextVel().setX(-relativeSpeed.getX() * 0.2);
+        r1.getNextVel().setX(0);
       } else if (right > top && right > bottom) {
         r1.getNextPos().setX(r1.getPos().getX() - right / 2 - cond * right / 2);
-        //r1.getNextVel().setX(-(r1.getVel().getX() - r2.getVel().getX()) * 0.2);
+        r1.getNextVel().setX(0);
       } else if (top > bottom) {
         r1.getNextPos().setY(r1.getPos().getY() + top / 2 + cond * top / 2 - 0.01);
-        r1.getNextVel().setY(-(r2.getVel().getY() - r1.getVel().getY()) * 0.4);
+        r1.getNextVel().setY(-relativeSpeed.getY() * 0.4);
       } else {
         r1.getNextPos().setY(r1.getPos().getY() - bottom / 2 - cond * bottom / 2 + 0.01);
         //r1.getNextVel().setY(-(r2.getVel().getY() - r1.getVel().getY()) * 0.4);
