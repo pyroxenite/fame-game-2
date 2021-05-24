@@ -116,9 +116,8 @@ public class GameController implements Updatable {
                         int numMob = ((Long) mobData.get("num")).intValue();
                         for (int i = 0; i < numMob; i++) {
                             Sprite sprite = new SpriteLoader().loadAnimation(mobName);
-                            MobController mob = new MobController(game, sprite);
+                            MobController mob = new MobController(game, sprite, ((Long)mobData.get("health")).intValue());
                             sprite.setPos(100, 115);
-                            mob.setMaxHealth(((Long)mobData.get("health")).intValue());
                             mob.setHostile(true);
                             mob.setMoveSpeed(((Double)mobData.get("speed")));
                             mob.setDmgFrames(

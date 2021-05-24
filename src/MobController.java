@@ -20,23 +20,19 @@ public class MobController extends PhysicsRectangle implements Updatable {
     private Random rand = new Random();
     private int targX = 0;
 
-    public MobController(Game game, Sprite target) {
-        super(0, 0, 19, 32);
+    public MobController(Game game, Sprite target, int maxHealth) {
+        super(0, 0, 12, 24);
         this.game = game;
         this.hostile = false;
-        this.maxHealth = 50;
+        this.maxHealth = maxHealth;
         this.currentHealth = maxHealth;
         this.adventurer = game.adventurer;
         this.target = target;
     }
 
-    public void setHostile(boolean isHostile) {
-        this.hostile = isHostile;
-    }
+    public void setHostile(boolean isHostile) { this.hostile = isHostile; }
 
-    public void setMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth;
-    }
+    public void setMaxHealth(int maxHealth) { this.maxHealth = maxHealth; }
 
     public void setMoveSpeed(double speed) {
         this.moveSpeed = speed;
@@ -46,9 +42,7 @@ public class MobController extends PhysicsRectangle implements Updatable {
         this.currentHealth = currentHealth;
     }
 
-    public void setTarget(Sprite target) {
-        this.target = target;
-    }
+    public void setTarget(Sprite target) { this.target = target; }
 
     public void setDmgFrames(int start, int end) {
         this.dmgFrameStart = start;
@@ -109,12 +103,13 @@ public class MobController extends PhysicsRectangle implements Updatable {
             int dir = (int) Math.signum(target.getPos().getX() - adventurer.getPos().getX());
             int magnitude = 1;
             currentHealth -= game.playerController.damage();
+            System.out.println(currentHealth);
             vel.add(dir * magnitude * 2, -magnitude);
             staggered = true;
             target.setImageSet("stagger");
         }
 
-        this.target.setPos(this.pos);
+        this.target.setPos(this.pos.copy().add(0, -5));
 
         if (staggered)
             return;
@@ -122,7 +117,7 @@ public class MobController extends PhysicsRectangle implements Updatable {
 
         if (vel.getX() > .5) {
             target.setFlipped(false);
-        } else if (vel.getX() < -.5) {
+        } else if (vel.getX() < -0.1) {
             target.setFlipped(true);
         }
 
@@ -162,7 +157,7 @@ public class MobController extends PhysicsRectangle implements Updatable {
                     if (!hasHitPlayer && target.intersects(adventurer)) { //has hit
                         game.camera.hitSide(10 * target.getDirection());
                         game.playerController.incHealth(-1);
-                        game.playerController.knockBack(10, (int) -Math.signum(target.getPos().getX() - adventurer.getPos().getX()));
+                        game.playerController.knockBack(3, (int) -Math.signum(target.getPos().getX() - adventurer.getPos().getX()));
                         hasHitPlayer = true; //set hit player flag
                     }
                 }
