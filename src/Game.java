@@ -31,6 +31,8 @@ public class Game extends Application {
 
     public PlayerController playerController;
 
+    PhysicsWorld physicsWorld;
+
     @Override
     public void start(Stage stage) {
         stage.setTitle("Game");
@@ -63,6 +65,10 @@ public class Game extends Application {
         foreground = backgrounds.get(1); 
         foreground.setDepth(-1);
 
+        // physics
+        physicsWorld = new PhysicsWorld();
+        updatables.add(physicsWorld);
+
         //player
         adventurer = new SpriteLoader().loadAnimation("adventurer");
         adventurer.setPos(0, 115);
@@ -81,7 +87,7 @@ public class Game extends Application {
         //end skeleton
 
         // LOL
-        // //skeleton
+        //skeletons
         // for (var i=0; i<5; i++) {
         //     Sprite skeletonSprite2 = new SpriteLoader().loadAnimation("skeleton");
         //     skeletonSprite2.setPos(Math.random()*500, 115 - 100);
@@ -92,7 +98,7 @@ public class Game extends Application {
         //     skeleton2.setHostile(true);
         //     updatables.add(skeleton2);
         // }
-        // //end skeleton
+        //end skeletons
         
         {
         Sprite mushroom1 = new Sprite(new Image("images/mushrooms/type1-single-1.png"));
@@ -136,6 +142,12 @@ public class Game extends Application {
         camera.setPos(adventurer.getPos().copy().add(new Vector(0, -100)));
         updatables.add(camera);
 
+
+        physicsWorld.add(new Rectangle(adventurer.getPos().getX(), adventurer.getPos().getY(), 50, 50).setFixed());
+        physicsWorld.add(new Rectangle(adventurer.getPos().getX(), adventurer.getPos().getY() - 100, 30, 30));
+
+        
+
         final long startNanoTime = System.nanoTime();
 
         // GAMELOOP
@@ -147,17 +159,21 @@ public class Game extends Application {
                 adjustCanvasToWindowSize(gc);
                 camera.applyTransform(gc);
 
-                for (Updatable obj: updatables) {
-                    obj.update();
-                }
+                // update everything
+                updatables.forEach(Updatable::update);
 
+                // draw background
                 background.draw(gc, camera);
 
-                for (Sprite s: sprites) {
-                    s.draw(gc, t);
-                }
+                // draw sprites
+                sprites.forEach(s -> s.draw(gc, t));
 
+                // draw foreground
                 foreground.draw(gc, camera);
+
+                // draw physics debug graphics
+                physicsWorld.draw(gc);
+
 
                 drawBlackRects(gc);
                 gameController.draw(gc);

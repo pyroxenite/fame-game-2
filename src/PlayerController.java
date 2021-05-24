@@ -132,7 +132,7 @@ public class PlayerController implements Updatable {
                 }
             }
 
-            if (keyHandler.isPressed("K") || keyHandler.isPressed("A")) {
+            if (keyHandler.isPressed("K") || keyHandler.isPressed("")) {
                 if (!attacking) {
                     target.setImageSet("attack" + currentAttackAnim);
                     attacking = true;

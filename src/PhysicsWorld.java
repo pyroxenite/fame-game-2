@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import javafx.scene.canvas.GraphicsContext;
 
 public class PhysicsWorld implements Updatable {
   private ArrayList<Rectangle> rects = new ArrayList<>();
@@ -12,8 +13,8 @@ public class PhysicsWorld implements Updatable {
     return this;
   }
 
-  public void draw() {
-    this.rects.forEach(r -> r.draw());
+  public void draw(GraphicsContext gc) {
+    this.rects.forEach(r -> r.draw(gc));
   }
 
   public void update() {

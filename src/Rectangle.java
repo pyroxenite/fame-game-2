@@ -1,3 +1,6 @@
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 public class Rectangle {
     private Vector pos;
     private Vector vel;
@@ -65,13 +68,17 @@ public class Rectangle {
         return h;
     }
 
-    public void draw() {
-        //some_rect_drawing_function(
-        //    this.pos.getX() - this.w / 2, 
-        //    this.pos.getY() - this.h / 2, 
-        //    this.w, 
-        //    this.h
-        //);
+    public void draw(GraphicsContext gc) {
+        if (isFixed)
+            gc.setStroke(Color.WHITE);
+        else
+            gc.setStroke(Color.YELLOW);
+        gc.strokeRect(
+            this.pos.getX() - this.w / 2, 
+            this.pos.getY() - this.h / 2, 
+            this.w, 
+            this.h
+        );
     }
 
     public void nextFrame() {
