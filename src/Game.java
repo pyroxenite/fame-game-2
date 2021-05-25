@@ -268,5 +268,9 @@ public class Game extends Application {
     public void setAdvertisementMaxFrame(int frame) {
         advertisementMaxFrame = frame;
     }
+
+    public PhysicsWorld getPhysicsWorld() {
+        return physicsWorld;
+    }
 }
 

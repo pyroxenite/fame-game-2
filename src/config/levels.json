@@ -3,8 +3,8 @@
         "biomeName": "forest",
         "yOffset": 600,
         "platforms": {
-            "1": {
-                "x": 100, "y": 100, "w": 30, "h": 30, "static": true
+            "first": {
+                "x": 100, "y": 100, "w": 30, "h": 30, "fixed": true
             }
         },
         "mobs": {
