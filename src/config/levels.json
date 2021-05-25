@@ -15,6 +15,7 @@
                 "speed": 0.6,
                 "frameStart": 6,
                 "frameEnd": 11,
+                "yOffset": 0,
                 "flip": false,
                 "isBoss": false
             },
@@ -25,6 +26,7 @@
                 "speed": 0.3,
                 "frameStart": 3,
                 "frameEnd": 7,
+                "yOffset": 15,
                 "flip": false,
                 "isBoss": true
             }
@@ -42,6 +44,7 @@
                 "speed": 0.6,
                 "frameStart": 3,
                 "frameEnd": 4,
+                "yOffset": -5,
                 "flip": true,
                 "isBoss": false
             },
@@ -52,6 +55,7 @@
                 "speed": 0.6,
                 "frameStart": 6,
                 "frameEnd": 10,
+                "yOffset": 35,
                 "flip": true,
                 "isBoss": true
             }
@@ -69,6 +73,7 @@
                 "speed": 0.6,
                 "frameStart": 2,
                 "frameEnd": 4,
+                "yOffset": -5,
                 "flip": false,
                 "isBoss": false
             },
@@ -79,6 +84,7 @@
                 "speed": 0.3,
                 "frameStart": 2,
                 "frameEnd": 3,
+                "yOffset": 27,
                 "flip": false,
                 "isBoss": true
             }
