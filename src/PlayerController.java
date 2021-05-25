@@ -6,6 +6,7 @@ public class PlayerController extends PhysicsRectangle implements Updatable {
     private Sprite target;
     private KeyHandler keyHandler;
     private int maxHealth = 10, currentHealth = 10;
+
     private boolean attacking, staggered = false;
     private int currentAttackAnim = 1;
     private int damage = 1;
@@ -31,6 +32,10 @@ public class PlayerController extends PhysicsRectangle implements Updatable {
         if (currentHealth < 0) currentHealth = 0;
     }
 
+    public void resetHealth() {
+        currentHealth = maxHealth;
+    }
+
     public void knockBack(int magnitude, int dir) { 
         target.setImageSet("stagger");
         staggered = true;
@@ -54,8 +59,6 @@ public class PlayerController extends PhysicsRectangle implements Updatable {
     }
 
     public void update() {
-        
-
         if (!attacking && !staggered) {
             if (Math.abs(vel.getX()) > .1) {
                 target.setImageSet("run");
@@ -84,6 +87,14 @@ public class PlayerController extends PhysicsRectangle implements Updatable {
 
         if (staggered && target.getCurrentFrameNumber() == 2) {
             staggered = false;
+        }
+
+        if (currentHealth <= 0) {
+            target.setImageSet("death");
+            if (target.getCurrentImageSet().equals("death") && target.getCurrentFrameNumber() == 5) {
+                System.out.println("This works");
+                target.setImageSet("death-final");
+            }
         }
 
         this.target.setPos(this.pos.copy().add(0, -5));

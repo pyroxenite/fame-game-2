@@ -89,6 +89,10 @@ public class Sprite {
         return imageSets.get(currentImageSet).size(); 
     }
 
+    public String getCurrentImageSet() {
+        return currentImageSet;
+    }
+
     public void setImageSet(String setName) { 
         if (currentImageSet != setName) {
             currentImageSet = setName; 

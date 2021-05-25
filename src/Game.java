@@ -7,8 +7,11 @@ import javafx.scene.canvas.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
+
+enum GameUIState { PLAYING, MENU, GAMEOVER }
 
 public class Game extends Application {
     StackPane root = new StackPane();
@@ -33,6 +36,12 @@ public class Game extends Application {
     PhysicsWorld physicsWorld;
     PhysicsRectangle groundRect;
     GameController gameController;
+
+    GameUIState gameUIState = GameUIState.PLAYING;
+
+    public GameUIState getGameUIState() { return gameUIState; }
+
+    public void setGameUIState(GameUIState gameUIState) { this.gameUIState = gameUIState; }
 
     public void initializeWorld() {
         updatables.clear();
@@ -99,6 +108,7 @@ public class Game extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setImageSmoothing(false); // stops pixel-art from bluring
+        gc.setFont(Font.loadFont("fonts/Bitmgothic.ttf", 18));
 
         ArrayList<ParallaxSprite> environment = SpriteLoader.loadEnvironment("Level 1");
         background = environment.get(0);
@@ -125,22 +135,30 @@ public class Game extends Application {
                 camera.applyTransform(gc);
 
                 // update everything
-                try{
+                if (gameUIState == GameUIState.PLAYING)
                     updatables.forEach(Updatable::update);
-                } catch (Exception e) {}
+                else {
+                    gameController.update();
+                    camera.update();
+                }
+                    
                 groundRect.getPos().setX(playerController.getPos().getX());
 
                 // draw background
                 background.draw(gc, camera);
 
                 // draw sprites
-                sprites.forEach(s -> s.draw(gc, t));
+                sprites.forEach(s -> s.draw(gc, t*3));
 
                 // draw foreground
                 foreground.draw(gc, camera);
 
                 // draw physics debug graphics
                 physicsWorld.draw(gc);
+
+                if (gameUIState == GameUIState.GAMEOVER) {
+                    drawGameOver(gc);
+                }
 
                 drawBlackRects(gc);
                 drawHealth(gc);
@@ -203,6 +221,20 @@ public class Game extends Application {
         }
     }
 
+    public void drawGameOver(GraphicsContext gc) {
+        double width = gc.getCanvas().getWidth();
+        double height = gc.getCanvas().getHeight();
+        double scale = Math.min(width, height/9*16)/1600;
+
+        if (width/16 < height/9) gc.setTransform(scale, 0, 0, scale, 0, (height-width/16*9)/2);
+        else gc.setTransform(scale, 0, 0, scale, (width-height/9*16)/2, 0);
+
+        gc.setFill(Color.WHITE);
+
+        gc.fillText("Game Over", width/2, height/2);
+    }
+
     public Camera getCamera() { return camera; }
     public KeyHandler getKeyHandler() { return keyHandler; }
 }
+

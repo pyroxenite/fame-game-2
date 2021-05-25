@@ -34,7 +34,7 @@ public class GameController implements Updatable {
             keyHandler.preventRepeat("H");
         }
         if (keyHandler.isPressed("L")) {
-            lowerCameraIntoForest();
+            lowerCamera();
         }
 
         if (keyHandler.isPressed("U")) {
@@ -54,6 +54,10 @@ public class GameController implements Updatable {
             } else if (camera.getPos().getY() > -10) {
                 camera.setTarget(game.adventurer);
             }
+        }
+
+        if (game.playerController.currentHealth() <= 0) {
+            handleDeath();
         }
     }
 
@@ -75,6 +79,7 @@ public class GameController implements Updatable {
                 if (alpha == 1) {
                     fade = -1;
                     delayCounter = 0;
+                    lowerCamera();
                 } else if (alpha == 0) {
                     fade = 0;
                     delayCounter = -1;
@@ -141,7 +146,7 @@ public class GameController implements Updatable {
         newLevelName = levelName;
     }
 
-    public void lowerCameraIntoForest() {
+    public void lowerCamera() {
         loweringCamera = true;
         Camera camera = game.getCamera();
         camera.setTarget(null);
@@ -149,5 +154,12 @@ public class GameController implements Updatable {
         camera.setPos(game.adventurer.getPos().getX(), -100);
         camera.setSpeed(0.002);
         camera.setScale(5);
+    }
+
+    private void handleDeath() {
+        game.setGameUIState(GameUIState.GAMEOVER);
+        Camera camera = game.getCamera();
+        camera.setSpeed(0.002);
+        camera.setAimScale(8);
     }
 }

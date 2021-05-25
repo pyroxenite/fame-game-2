@@ -31,6 +31,14 @@
         "stagger": {
             "path": "images/adventurer/hurt-0",
             "delta": 0.1
+        },
+        "death": {
+            "path": "images/adventurer/die-0",
+            "delta": 0.2
+        },
+        "death-final": {
+            "path": "images/adventurer/die-0",
+            "delta": 1000.0
         }
     },
     "skeleton" : {
