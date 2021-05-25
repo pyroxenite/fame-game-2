@@ -175,6 +175,7 @@ public class GameController implements Updatable {
         camera.setSpeed(0.002);
         camera.setAimScale(8);
         game.advertise(new Sprite(new Image("images/text/you-have-died.png")));
+        game.setAdvertisementMaxFrame(300);
     }
 
     public void inititalize() {

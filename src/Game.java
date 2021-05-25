@@ -262,5 +262,9 @@ public class Game extends Application {
 
     public Camera getCamera() { return camera; }
     public KeyHandler getKeyHandler() { return keyHandler; }
+
+    public void setAdvertisementMaxFrame(int frame) {
+        advertisementMaxFrame = frame;
+    }
 }
 
