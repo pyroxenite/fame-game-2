@@ -165,7 +165,7 @@ public class Game extends Application {
                 physicsWorld.draw(gc);
 
                 if (gameUIState == GameUIState.GAMEOVER) {
-                    drawGameOver(gc);
+                    
                 }
 
                 drawBlackRects(gc);
@@ -231,16 +231,6 @@ public class Game extends Application {
         }
     }
 
-    public void drawGameOver(GraphicsContext gc) {
-        double width = gc.getCanvas().getWidth();
-        double height = gc.getCanvas().getHeight();
-        double scale = Math.min(width, height/9*16)/1600;
-
-        if (width/16 < height/9) gc.setTransform(scale, 0, 0, scale, 0, (height-width/16*9)/2);
-        else gc.setTransform(scale, 0, 0, scale, (width-height/9*16)/2, 0);
-
-    }
-
     public void drawAdvertisedText(GraphicsContext gc) {
         if (advertisedText == null)
             return;
@@ -250,6 +240,7 @@ public class Game extends Application {
         } else {
             advertisedText = null;
             advertisementFrame = 0;
+            return;
         }
 
         double width = gc.getCanvas().getWidth();
@@ -273,5 +264,9 @@ public class Game extends Application {
 
     public Camera getCamera() { return camera; }
     public KeyHandler getKeyHandler() { return keyHandler; }
+
+    public void setAdvertisementMaxFrame(int frame) {
+        advertisementMaxFrame = frame;
+    }
 }
 
