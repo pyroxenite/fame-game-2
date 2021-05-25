@@ -16,7 +16,7 @@ public class Sprite {
     private Vector pos = new Vector();
     private boolean animated = false;
     private boolean verticalFlip = false;
-    private int currentFrameNumber = 0;
+    private int currentFrameNumber = 0, yOffset = 0;
     private double lastFrameUpdateTime = 0;
 
     /**
@@ -64,6 +64,8 @@ public class Sprite {
         pos.setX(x);
         pos.setY(y);
     }
+
+    public void setOffset(int o) { this.yOffset = o; }
 
     public int getCurrentFrameNumber() {
         return currentFrameNumber;
@@ -121,7 +123,7 @@ public class Sprite {
             gc.drawImage(
                 image, 
                 pos.getX() - image.getWidth()/2 + image.getWidth(), 
-                pos.getY() - image.getHeight()/2,
+                pos.getY() - image.getHeight()/2 + yOffset,
                 -image.getWidth(),
                 image.getHeight()
             );
@@ -129,7 +131,7 @@ public class Sprite {
             gc.drawImage(
                 image, 
                 pos.getX() - image.getWidth()/2, 
-                pos.getY() - image.getHeight()/2,
+                pos.getY() - image.getHeight()/2  + yOffset,
                 image.getWidth(),
                 image.getHeight()
             );
