@@ -123,7 +123,7 @@ public class Sprite {
             gc.drawImage(
                 image, 
                 pos.getX() - image.getWidth()/2 + image.getWidth(), 
-                pos.getY() - image.getHeight()/2 + yOffset,
+                pos.getY() - image.getHeight()/2 - yOffset,
                 -image.getWidth(),
                 image.getHeight()
             );
@@ -131,7 +131,7 @@ public class Sprite {
             gc.drawImage(
                 image, 
                 pos.getX() - image.getWidth()/2, 
-                pos.getY() - image.getHeight()/2  + yOffset,
+                pos.getY() - image.getHeight()/2  - yOffset,
                 image.getWidth(),
                 image.getHeight()
             );

@@ -5,7 +5,7 @@ public class PlayerController extends PhysicsRectangle implements Updatable {
     private Game game;
     private Sprite target;
     private KeyHandler keyHandler;
-    private int maxHealth = 10, currentHealth = 10;
+    private int maxHealth = 6, currentHealth = 6;
 
     private boolean attacking, staggered = false;
     private int currentAttackAnim = 1;

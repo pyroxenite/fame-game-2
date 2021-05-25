@@ -127,7 +127,8 @@ public class GameController implements Updatable {
 
                             Sprite sprite = SpriteLoader.loadAnimation(mobName);
                             sprite.setPos(new Vector(300 + Math.random()*500 + (isBoss?400:0), 115));
-                            sprite.setOffset(((Double)mobData.get("speed")).intValue());
+                            System.out.println(((Long)mobData.get("yOffset")).intValue());
+                            sprite.setOffset(((Long)mobData.get("yOffset")).intValue());
                             
                             MobController mob = new MobController(game, sprite, ((Long) mobData.get("health")).intValue());
 
