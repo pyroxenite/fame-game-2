@@ -65,7 +65,7 @@ public class GameController implements Updatable {
 
         if (deathIsDone && game.getAdFrame() == 100) {
             deathIsDone = false;
-            this.changeLevels(newLevelName);
+            this.changeLevels("Level 1");
             game.setGameUIState(GameUIState.PLAYING);
         }
     }
