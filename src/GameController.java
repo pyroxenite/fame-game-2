@@ -58,7 +58,7 @@ public class GameController implements Updatable {
             }
         }
 
-        if (game.playerController.currentHealth() <= 0 && !deathIsDone) {
+        if (game.getGameUIState() == GameUIState.PLAYING && game.playerController.currentHealth() <= 0 && !deathIsDone) {
             handleDeath();
             deathIsDone = true;
         }
@@ -103,6 +103,7 @@ public class GameController implements Updatable {
 
     public void changeLevels(String levelName) {
         game.initializeWorld();
+        game.gameUIState = GameUIState.PLAYING;
 
         game.advertise(new Sprite(new Image("images/text/" + levelName + ".png")));
 
@@ -112,7 +113,7 @@ public class GameController implements Updatable {
             JSONObject levelData = (JSONObject)jsonObject.get(levelName);
 
             for (Object k : levelData.keySet()) {
-                String name = (String)k;
+                String name = (String) k;
                 if (name.equals("mobs")) {
                     JSONObject mobs = (JSONObject)levelData.get(name);
 
@@ -141,6 +142,11 @@ public class GameController implements Updatable {
                             game.addMob(sprite, mob);
                         }
                     }
+                } else if (name.equals("platforms")) {
+                    JSONObject platforms = (JSONObject)levelData.get("platforms");
+                    for (Object p : platforms.keySet()) {
+                        System.out.println(p);
+                    }
                 }
             }   
         } catch (Exception e) {
@@ -156,7 +162,7 @@ public class GameController implements Updatable {
         Camera camera = game.getCamera();
         camera.setTarget(null);
         //camera.setPos(game.adventurer.getPos().getX(), -480);
-        camera.setPos(game.adventurer.getPos().getX(), -100);
+        camera.setPos(game.adventurer.getPos().getX(), -120);
         camera.setSpeed(0.002);
         camera.setScale(5);
     }
