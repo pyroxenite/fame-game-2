@@ -9,6 +9,11 @@ public class PhysicsWorld implements Updatable {
     return this;
   }
 
+  public PhysicsWorld remove(PhysicsRectangle rect) {
+    this.rects.remove(rect);
+    return this;
+  }
+
   public void draw(GraphicsContext gc) {
     this.rects.forEach(r -> r.draw(gc));
   }

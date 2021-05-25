@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Hashtable;
 
 import javafx.application.Application;
@@ -28,8 +29,15 @@ public class Game extends Application {
 
     Sprite adventurer;
 
+    int currentLevel = 1;
+
     public PlayerController playerController;
 
+    
+    PhysicsWorld physicsWorld;
+    PhysicsRectangle groundRect;
+    GameController gameController;
+    
     public void clearLevel() {
         sprites.clear();
         sprites.add(adventurer);
@@ -38,9 +46,20 @@ public class Game extends Application {
     public void addMob(Sprite sprite, MobController mob) {
         sprites.add(sprite);
         updatables.add(mob);
+        physicsWorld.add(mob);
     }
-    PhysicsWorld physicsWorld;
-    PhysicsRectangle groundRect;
+
+    public void removeMob(Sprite sprite, MobController mob) {
+        sprites.remove(sprite);
+        updatables.remove(mob);
+        physicsWorld.remove(mob);
+    }
+
+    public void nextLevel() {
+        currentLevel++;
+        if (currentLevel > 3) currentLevel = 1;
+        gameController.changeLevels("Level " + currentLevel);
+    }
 
     @Override
     public void start(Stage stage) {
@@ -61,7 +80,7 @@ public class Game extends Application {
         gc.setImageSmoothing(false); // stops pixel-art from bluring
 
         // game controler
-        GameController gameController = new GameController(this);
+        gameController = new GameController(this);
         updatables.add(gameController);
 
         // background sound
@@ -152,7 +171,9 @@ public class Game extends Application {
                 camera.applyTransform(gc);
 
                 // update everything
-                updatables.forEach(Updatable::update);
+                try{
+                    updatables.forEach(Updatable::update);
+                } catch (Exception e) {}
                 groundRect.getPos().setX(playerController.getPos().getX());
 
                 // draw background
@@ -166,8 +187,6 @@ public class Game extends Application {
 
                 // draw physics debug graphics
                 physicsWorld.draw(gc);
-
-
 
                 drawBlackRects(gc);
                 drawHealth(gc);

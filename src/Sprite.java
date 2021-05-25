@@ -18,6 +18,7 @@ public class Sprite {
     private boolean verticalFilp = false;
     private int currentFrameNumber = 0;
     private double lastFrameUpdateTime = 0;
+    private int flip = 1;
 
     /**
      * Used to initialize a single image Sprite.
@@ -54,6 +55,8 @@ public class Sprite {
         this.currentImageSet = initSet;
         animated = true;
     }
+
+    public void setFlip(int flip) { this.flip = flip; }
 
     public Vector getPos() { return pos; }
 
@@ -116,17 +119,17 @@ public class Sprite {
         if (verticalFilp) {
             gc.drawImage(
                 image, 
-                pos.getX() - image.getWidth()/2 + image.getWidth(), 
+                pos.getX() - image.getWidth()/2 + (flip == 1 ? image.getWidth() : 0), 
                 pos.getY() - image.getHeight()/2,
-                -image.getWidth(),
+                -image.getWidth() * flip,
                 image.getHeight()
             );
         } else {
             gc.drawImage(
                 image, 
-                pos.getX() - image.getWidth()/2, 
+                pos.getX() - image.getWidth()/2  + (flip == -1 ? image.getWidth() : 0), 
                 pos.getY() - image.getHeight()/2,
-                image.getWidth(),
+                image.getWidth() * flip,
                 image.getHeight()
             );
         }
