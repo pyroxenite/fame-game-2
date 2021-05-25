@@ -15,10 +15,9 @@ public class Sprite {
     Hashtable<String, Double> deltas;
     private Vector pos = new Vector();
     private boolean animated = false;
-    private boolean verticalFilp = false;
+    private boolean verticalFlip = false;
     private int currentFrameNumber = 0;
     private double lastFrameUpdateTime = 0;
-    private int flip = 1;
 
     /**
      * Used to initialize a single image Sprite.
@@ -56,8 +55,6 @@ public class Sprite {
         animated = true;
     }
 
-    public void setFlip(int flip) { this.flip = flip; }
-
     public Vector getPos() { return pos; }
 
     public void setPos(Vector pos) {
@@ -72,10 +69,10 @@ public class Sprite {
         return currentFrameNumber;
     }
 
-    public void setFlipped(boolean verticalFilp) { this.verticalFilp = verticalFilp; } 
+    public void setFlipped(boolean verticalFlip) { this.verticalFlip = verticalFlip; } 
 
     public int getDirection() {
-        return verticalFilp?-1:1;
+        return verticalFlip?-1:1;
     }
 
     public Image getCurrentImage(double time) {
@@ -116,20 +113,20 @@ public class Sprite {
         else
             image = imageSets.get("idle").get(0);
 
-        if (verticalFilp) {
+        if (verticalFlip) {
             gc.drawImage(
                 image, 
-                pos.getX() - image.getWidth()/2 + (flip == 1 ? image.getWidth() : 0), 
+                pos.getX() - image.getWidth()/2 + image.getWidth(), 
                 pos.getY() - image.getHeight()/2,
-                -image.getWidth() * flip,
+                -image.getWidth(),
                 image.getHeight()
             );
         } else {
             gc.drawImage(
                 image, 
-                pos.getX() - image.getWidth()/2  + (flip == -1 ? image.getWidth() : 0), 
+                pos.getX() - image.getWidth()/2, 
                 pos.getY() - image.getHeight()/2,
-                image.getWidth() * flip,
+                image.getWidth(),
                 image.getHeight()
             );
         }

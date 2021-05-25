@@ -20,9 +20,9 @@ public class MobController extends PhysicsRectangle implements Updatable {
     private int targX = 0;
 
     public MobController(Game game, Sprite target, int maxHealth) {
-        super(0, 0, target.getCurrentImage(0).getWidth()/3*2, target.getCurrentImage(0).getHeight()*0.8);
+        super(0, 0, Math.log(target.getCurrentImage(0).getWidth())*4, Math.log(target.getCurrentImage(0).getHeight())*8);
         this.game = game;
-        this.hostile = false;
+        this.hostile = true;
         this.maxHealth = maxHealth;
         this.currentHealth = maxHealth;
         this.adventurer = game.adventurer;
@@ -93,7 +93,8 @@ public class MobController extends PhysicsRectangle implements Updatable {
 
     public void update() {
         this.target.setPos(this.pos.copy().add(0, -5));
-        if (vel.getX() > .5) {
+
+        if (vel.getX() > 0.1) {
             target.setFlipped(false);
         } else if (vel.getX() < -0.1) {
             target.setFlipped(true);

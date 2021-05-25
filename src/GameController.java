@@ -118,7 +118,7 @@ public class GameController implements Updatable {
                         Boolean isBoss = (Boolean) mobData.get("isBoss");
                         for (int i = 0; i < numMob; i++) {
                             Sprite sprite = new SpriteLoader().loadAnimation(mobName);
-                            sprite.setFlip((flip ? -1 : 1));
+                            //sprite.setFlip((flip ? -1 : 1));
                             sprite.setPos(100, 115);
                             MobController mob = new MobController(game, sprite, ((Long)mobData.get("health")).intValue());
                             mob.setHostile(true);
