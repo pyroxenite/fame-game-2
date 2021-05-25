@@ -39,11 +39,11 @@ public class GameController implements Updatable {
             lowerCamera();
         }
 
-        if (keyHandler.isPressed("U")) {
-            fade = 1;
-            currentLevel = currentLevel%3 + 1;
-            newLevelName = "Level " + currentLevel;
-        }
+        // if (keyHandler.isPressed("U")) {
+        //     fade = 1;
+        //     currentLevel = currentLevel%3 + 1;
+        //     newLevelName = "Level " + currentLevel;
+        // }
 
         if (loweringCamera) {
             Camera camera = game.getCamera();
@@ -61,6 +61,11 @@ public class GameController implements Updatable {
         if (game.playerController.currentHealth() <= 0 && !deathIsDone) {
             handleDeath();
             deathIsDone = true;
+        }
+
+        if (deathIsDone && game.getAdFrame() == 100) {
+            deathIsDone = false;
+            this.changeLevels(newLevelName);
         }
     }
 

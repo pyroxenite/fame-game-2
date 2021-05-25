@@ -47,6 +47,8 @@ public class Game extends Application {
 
     public void setGameUIState(GameUIState gameUIState) { this.gameUIState = gameUIState; }
 
+    public int getAdFrame() { return advertisementFrame; }
+
     public void initializeWorld() {
         gameController.inititalize();
 
