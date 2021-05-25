@@ -91,8 +91,9 @@ public class PlayerController extends PhysicsRectangle implements Updatable {
 
         if (currentHealth <= 0) {
             target.setImageSet("death");
-            if (target.getCurrentImageSet().equals("death") && target.getCurrentFrameNumber() == 5) {
+            if (target.getCurrentImageSet().equals("death")) {
                 System.out.println("This works");
+                System.out.println(target.getCurrentFrameNumber());
                 target.setImageSet("death-final");
             }
         }

@@ -108,7 +108,7 @@ public class Game extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setImageSmoothing(false); // stops pixel-art from bluring
-        gc.setFont(Font.loadFont("fonts/Bitmgothic.ttf", 18));
+        gc.setFont(Font.loadFont("./fonts/Bitmgothic.ttf", 18));
 
         ArrayList<ParallaxSprite> environment = SpriteLoader.loadEnvironment("Level 1");
         background = environment.get(0);
@@ -148,7 +148,7 @@ public class Game extends Application {
                 background.draw(gc, camera);
 
                 // draw sprites
-                sprites.forEach(s -> s.draw(gc, t*3));
+                sprites.forEach(s -> s.draw(gc, t));
 
                 // draw foreground
                 foreground.draw(gc, camera);
