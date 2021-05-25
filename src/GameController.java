@@ -120,13 +120,9 @@ public class GameController implements Updatable {
                             Sprite sprite = new SpriteLoader().loadAnimation(mobName);
                             sprite.setFlip((flip ? -1 : 1));
                             sprite.setPos(100, 115);
-<<<<<<< HEAD
-                            game.physicsWorld.add(mob);
-=======
                             MobController mob = new MobController(game, sprite, ((Long)mobData.get("health")).intValue());
                             mob.setHostile(true);
                             if (isBoss) mob.setBoss();
->>>>>>> 5cd3ba61bc4d95407aaedccc526c607e6f4a5bbe
                             mob.setMoveSpeed(((Double)mobData.get("speed")));
                             mob.setDmgFrames(
                                 ((Long)mobData.get("frameStart")).intValue(), 

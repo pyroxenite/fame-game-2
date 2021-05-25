@@ -5,11 +5,7 @@
         "platforms": {},
         "mobs": {
             "skeleton": {
-<<<<<<< HEAD
-                "num": 1,
-=======
                 "num": 3,
->>>>>>> 5cd3ba61bc4d95407aaedccc526c607e6f4a5bbe
                 "health": 3,
                 "damage": 1,
                 "speed": 0.6,
@@ -18,19 +14,11 @@
                 "flip": false,
                 "isBoss": false
             },
-<<<<<<< HEAD
-            "slime": {
-                "num": 1,
-                "health": 50,
-                "damage": 1,
-                "speed": 0.6,
-=======
             "wizard": {
                 "num": 1,
                 "health": 10,
                 "damage": 2,
                 "speed": 0.3,
->>>>>>> 5cd3ba61bc4d95407aaedccc526c607e6f4a5bbe
                 "frameStart": 3,
                 "frameEnd": 7,
                 "flip": false,
