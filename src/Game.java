@@ -38,12 +38,18 @@ public class Game extends Application {
     GameController gameController;
 
     GameUIState gameUIState = GameUIState.PLAYING;
-
+    
+    private Sprite advertisedText = null;
+    private int advertisementFrame = 0;
+    private int advertisementMaxFrame = 100;
+    
     public GameUIState getGameUIState() { return gameUIState; }
 
     public void setGameUIState(GameUIState gameUIState) { this.gameUIState = gameUIState; }
 
     public void initializeWorld() {
+        gameController.inititalize();
+
         updatables.clear();
         updatables.add(gameController);
 
@@ -163,6 +169,8 @@ public class Game extends Application {
                 drawBlackRects(gc);
                 drawHealth(gc);
                 gameController.draw(gc);
+
+                drawAdvertisedText(gc);
             }
         }.start();
 
@@ -229,9 +237,36 @@ public class Game extends Application {
         if (width/16 < height/9) gc.setTransform(scale, 0, 0, scale, 0, (height-width/16*9)/2);
         else gc.setTransform(scale, 0, 0, scale, (width-height/9*16)/2, 0);
 
-        gc.setFill(Color.WHITE);
+    }
 
-        gc.fillText("Game Over", width/2, height/2);
+    public void drawAdvertisedText(GraphicsContext gc) {
+        if (advertisedText == null)
+            return;
+
+        if (advertisementFrame < advertisementMaxFrame) {
+            advertisementFrame++;
+        } else {
+            advertisedText = null;
+            advertisementFrame = 0;
+        }
+
+        double width = gc.getCanvas().getWidth();
+        double height = gc.getCanvas().getHeight();
+        double scale = Math.min(width, height/9*16)/1600;
+
+        if (width/16 < height/9) gc.setTransform(scale, 0, 0, scale, 0, (height-width/16*9)/2);
+        else gc.setTransform(scale, 0, 0, scale, (width-height/9*16)/2, 0);
+
+        var t = advertisementFrame/(double) advertisementMaxFrame;
+
+        gc.translate(800 + Math.tan((t-0.5)*Math.PI) * 50, 450);
+        gc.scale(3, 3);
+
+        advertisedText.draw(gc, 0);
+    }
+
+    public void advertise(Sprite text) {
+        advertisedText = text;
     }
 
     public Camera getCamera() { return camera; }

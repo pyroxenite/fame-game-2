@@ -1,5 +1,6 @@
 import javafx.scene.paint.Color;
 import javafx.scene.canvas.*;
+import javafx.scene.image.Image;
 import javafx.application.Application;
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ public class GameController implements Updatable {
     int delayCounterMax = 100;
     int delayCounter = -1;
     int currentLevel = 1;
+    boolean deathIsDone = false;
 
     String newLevelName;
 
@@ -56,8 +58,9 @@ public class GameController implements Updatable {
             }
         }
 
-        if (game.playerController.currentHealth() <= 0) {
+        if (game.playerController.currentHealth() <= 0 && !deathIsDone) {
             handleDeath();
+            deathIsDone = true;
         }
     }
 
@@ -100,6 +103,8 @@ public class GameController implements Updatable {
 
     public void changeLevels(String levelName) {
         game.initializeWorld();
+
+        game.advertise(new Sprite(new Image("images/text/" + levelName + ".png")));
 
         try {
             Object obj = parser.parse(new FileReader("config/levels.json"));
@@ -162,5 +167,10 @@ public class GameController implements Updatable {
         Camera camera = game.getCamera();
         camera.setSpeed(0.002);
         camera.setAimScale(8);
+        game.advertise(new Sprite(new Image("images/text/you-have-died.png")));
+    }
+
+    public void inititalize() {
+        deathIsDone = false;
     }
 }
