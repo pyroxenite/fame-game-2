@@ -3,9 +3,10 @@
         "biomeName": "forest",
         "yOffset": 600,
         "platforms": {
-            "first": {
-                "x": 100, "y": 100, "w": 30, "h": 30, "fixed": true
-            }
+            "hindwall": { "x": -100, "y": 109, "w": 30, "h": 40, "fixed": true },
+            "platform": { "x": 150, "y": 90, "w": 50, "h": 5, "fixed": true },
+            "highwallform": { "x": 250, "y": 109, "w": 30, "h": 70, "fixed": true },
+            "box": { "x": 155, "y": 75, "w": 25, "h": 25, "fixed": false }
         },
         "mobs": {
             "skeleton": {
