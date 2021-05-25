@@ -5,33 +5,35 @@ public class MobController extends PhysicsRectangle implements Updatable {
 
     private Sprite target;
     private Sprite adventurer;
-    private Boolean hostile = true;
-    private int maxHealth;
     private int currentHealth;
     private double moveSpeed = 0.4;
-    private double friction = .05;
     private static double detectionRange = 150;
     private static double attackRange = 25;
     private Game game;
     private boolean hasHitPlayer, staggered, dead = false, isBoss = false;
     private int dmgFrameEnd, dmgFrameStart;
+    private int damage = 1;
+
+    public int getDamage() { return damage; }
+    public void setDamage(int damage) { this.damage = damage; }
 
     private Random rand = new Random();
+
     private int targX = 0;
 
     public MobController(Game game, Sprite target, int maxHealth) {
-        super(0, 0, Math.log(target.getCurrentImage(0).getWidth())*4, Math.log(target.getCurrentImage(0).getHeight())*8);
+        super(
+            target.getPos().getX(),
+            target.getPos().getY(), 
+            Math.log(target.getCurrentImage(0).getWidth())*4, 
+            Math.log(target.getCurrentImage(0).getHeight())*8
+        );
+        this.setIsEntity(true);
         this.game = game;
-        this.hostile = true;
-        this.maxHealth = maxHealth;
         this.currentHealth = maxHealth;
         this.adventurer = game.adventurer;
         this.target = target;
     }
-
-    public void setHostile(boolean isHostile) { this.hostile = isHostile; }
-
-    public void setMaxHealth(int maxHealth) { this.maxHealth = maxHealth; }
 
     public void setBoss() { this.isBoss = true; }
 
@@ -50,7 +52,7 @@ public class MobController extends PhysicsRectangle implements Updatable {
         this.dmgFrameEnd = end;
     }
 
-    //FSM state and transition implementation
+    // FSM state and transition implementation
     public enum BehaviorState {
         PATROL {
             @Override

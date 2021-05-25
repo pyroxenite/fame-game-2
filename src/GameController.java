@@ -14,7 +14,7 @@ public class GameController implements Updatable {
 
     boolean loweringCamera = false;
     int fade = 0;
-    double alpha = 0;
+    double alpha = 1;
     int delayCounterMax = 100;
     int delayCounter = -1;
     int currentLevel = 1;
@@ -70,14 +70,12 @@ public class GameController implements Updatable {
             
             if (delayCounter < 0) {
                 alpha += fade/100.0;
-                alpha = alpha > 1 ? 1 : alpha;
-                alpha = alpha < 0 ? 0 : alpha;
+                alpha = Math.max(0, Math.min(1, alpha)); 
+
                 if (alpha == 1) {
                     fade = -1;
                     delayCounter = 0;
-                    alpha += .01;
-                }
-                if (alpha == 0) {
+                } else if (alpha == 0) {
                     fade = 0;
                     delayCounter = -1;
                 }
@@ -117,16 +115,18 @@ public class GameController implements Updatable {
 
                         for (int i = 0; i < numMob; i++) {
 
-                            Sprite sprite = new SpriteLoader().loadAnimation(mobName);
-                            sprite.setPos(Math.random()*500 + (isBoss?400:0), 115);
+                            Sprite sprite = SpriteLoader.loadAnimation(mobName);
+                            sprite.setPos(new Vector(300 + Math.random()*500 + (isBoss?400:0), 115));
 
-                            MobController mob = new MobController(game, sprite, ((Long)mobData.get("health")).intValue());
+                            MobController mob = new MobController(game, sprite, ((Long) mobData.get("health")).intValue());
 
                             if (isBoss) mob.setBoss();
+                            mob.setDamage(0);
+
                             mob.setMoveSpeed(((Double)mobData.get("speed")));
                             mob.setDmgFrames(
-                                ((Long)mobData.get("frameStart")).intValue(), 
-                                ((Long)mobData.get("frameEnd")).intValue()
+                                ((Long) mobData.get("frameStart")).intValue(), 
+                                ((Long) mobData.get("frameEnd")).intValue()
                             );
                             game.addMob(sprite, mob);
                         }
@@ -145,8 +145,8 @@ public class GameController implements Updatable {
         loweringCamera = true;
         Camera camera = game.getCamera();
         camera.setTarget(null);
-        camera.setPos(game.adventurer.getPos().getX(), -480);
-        // camera.setPos(game.adventurer.getPos().getX(), -100);
+        //camera.setPos(game.adventurer.getPos().getX(), -480);
+        camera.setPos(game.adventurer.getPos().getX(), -100);
         camera.setSpeed(0.002);
         camera.setScale(5);
     }

@@ -76,14 +76,7 @@ public class PlayerController extends PhysicsRectangle implements Updatable {
 
         vel.scaleX(0.8);
 
-        //if (target.getPos().getY() > 115) { // 115
-        //    target.getPos().setY(115);
-        //    if (vel.getY() > 1)
-        //        game.camera.hitGround(vel.getY()*5);
-        //    vel.setY(0);
-        //}
-
-         //reset attacking timer
+        //reset attacking timer
         if (attacking && target.getCurrentFrameNumber() == target.getCurrentImageSetCount() - 1) {
             attacking = false; 
             hitList.clear();

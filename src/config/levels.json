@@ -44,7 +44,7 @@
             "demon": {
                 "num": 1,
                 "health": 10,
-                "damage": 1,
+                "damage": 3,
                 "speed": 0.6,
                 "frameStart": 6,
                 "frameEnd": 10,
@@ -61,7 +61,7 @@
             "soldier": {
                 "num": 3,
                 "health": 3,
-                "damage": 1,
+                "damage": 2,
                 "speed": 0.6,
                 "frameStart": 2,
                 "frameEnd": 4,
@@ -71,7 +71,7 @@
             "king": {
                 "num": 1,
                 "health": 10,
-                "damage": 2,
+                "damage": 5,
                 "speed": 0.3,
                 "frameStart": 2,
                 "frameEnd": 3,

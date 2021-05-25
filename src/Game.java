@@ -33,17 +33,6 @@ public class Game extends Application {
     PhysicsWorld physicsWorld;
     PhysicsRectangle groundRect;
     GameController gameController;
-    
-    public void clearLevel() {
-        sprites.clear();
-        sprites.add(adventurer);
-
-        physicsWorld.clear();
-        physicsWorld.add(playerController);
-
-        groundRect = new PhysicsRectangle(0, 115 + 50 + 14, 10e10, 100).setFixed();
-        physicsWorld.add(groundRect);
-    }
 
     public void initializeWorld() {
         updatables.clear();
@@ -59,8 +48,8 @@ public class Game extends Application {
 
         // player
         sprites.clear();
-        adventurer = new SpriteLoader().loadAnimation("adventurer");
-        adventurer.setPos(0, 115);
+        adventurer = SpriteLoader.loadAnimation("adventurer");
+        adventurer.setPos(-100, 115);
         sprites.add(adventurer);
 
         playerController = new PlayerController(this, keyHandler, adventurer);
@@ -123,12 +112,10 @@ public class Game extends Application {
         bgSound = new SoundBackground();
         bgSound.run();
 
-        // initializeWorld();
         gameController.changeLevels("Level 1");
-
-        final long startNanoTime = System.nanoTime();
-
+        
         // GAMELOOP
+        final long startNanoTime = System.nanoTime();
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 double t = (currentNanoTime - startNanoTime) / 1e9;
