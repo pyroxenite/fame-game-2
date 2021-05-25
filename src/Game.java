@@ -1,7 +1,4 @@
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Hashtable;
-
 import javafx.application.Application;
 import javafx.animation.*;
 import javafx.stage.*;
@@ -32,7 +29,6 @@ public class Game extends Application {
     int currentLevel = 1;
 
     public PlayerController playerController;
-
     
     PhysicsWorld physicsWorld;
     PhysicsRectangle groundRect;
@@ -41,7 +37,43 @@ public class Game extends Application {
     public void clearLevel() {
         sprites.clear();
         sprites.add(adventurer);
-    };
+
+        physicsWorld.clear();
+        physicsWorld.add(playerController);
+
+        groundRect = new PhysicsRectangle(0, 115 + 50 + 14, 10e10, 100).setFixed();
+        physicsWorld.add(groundRect);
+    }
+
+    public void initializeWorld() {
+        updatables.clear();
+        updatables.add(gameController);
+
+        // physics
+        physicsWorld = new PhysicsWorld();
+        updatables.add(physicsWorld);
+
+        // ground
+        groundRect = new PhysicsRectangle(0, 115 + 50 + 14, 10e10, 100).setFixed();
+        physicsWorld.add(groundRect);
+
+        // player
+        sprites.clear();
+        adventurer = new SpriteLoader().loadAnimation("adventurer");
+        adventurer.setPos(0, 115);
+        sprites.add(adventurer);
+
+        playerController = new PlayerController(this, keyHandler, adventurer);
+        updatables.add(playerController);
+        physicsWorld.add(playerController);
+
+        // camera
+        camera.setScale(3);
+        camera.setSpeed(0.05);
+        camera.setTarget(adventurer);
+        camera.setPos(adventurer.getPos().copy().add(new Vector(0, -100)));
+        updatables.add(camera);
+    }
 
     public void addMob(Sprite sprite, MobController mob) {
         sprites.add(sprite);
@@ -79,85 +111,20 @@ public class Game extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setImageSmoothing(false); // stops pixel-art from bluring
 
+        ArrayList<ParallaxSprite> environment = SpriteLoader.loadEnvironment("Level 1");
+        background = environment.get(0);
+        foreground = environment.get(1); 
+        foreground.setDepth(-1);
+
         // game controler
         gameController = new GameController(this);
-        updatables.add(gameController);
 
         // background sound
         bgSound = new SoundBackground();
         bgSound.run();
 
-        // background
-        ArrayList<ParallaxSprite> backgrounds = (new SpriteLoader()).loadBackground("Level 1");
-        background = backgrounds.get(0);
-        foreground = backgrounds.get(1); 
-        foreground.setDepth(-1);
-
-        // physics
-        physicsWorld = new PhysicsWorld();
-        updatables.add(physicsWorld);
-
-        // ground
-        groundRect = new PhysicsRectangle(0, 115 + 50 + 14, 10e10, 100).setFixed();
-        physicsWorld.add(groundRect);
-
-        //player
-        adventurer = new SpriteLoader().loadAnimation("adventurer");
-        adventurer.setPos(0, 115);
-        sprites.add(adventurer);
-        //end player
-
+        // initializeWorld();
         gameController.changeLevels("Level 1");
-        
-        {
-        Sprite mushroom1 = new Sprite(new Image("images/mushrooms/type1-single-1.png"));
-        mushroom1.setPos(100, 130);
-        sprites.add(mushroom1);
-
-        Sprite mushroom2 = new Sprite(new Image("images/mushrooms/type1-double-1.png"));
-        mushroom2.setPos(300, 130);
-        sprites.add(mushroom2);
-
-        Sprite mushroom3 = new Sprite(new Image("images/mushrooms/type1-single-2.png"));
-        mushroom3.setPos(400, 130);
-        sprites.add(mushroom3);
-
-        Sprite mushroom4 = new Sprite(new Image("images/mushrooms/type1-triple-1.png"));
-        mushroom4.setPos(700, 130);
-        sprites.add(mushroom4);
-
-        Sprite mushroom5 = new Sprite(new Image("images/mushrooms/type1-single-3.png"));
-        mushroom5.setPos(900, 130);
-        sprites.add(mushroom5);
-        }
-
-
-//        Sprite platformTest = new Sprite(new Image("images/platform.png"));
-//        platformTest.setPos(200, 50);
-//        sprites.add(platformTest);
-
-        // controls
-        playerController = new PlayerController(this, keyHandler, adventurer);
-        //playerController.setActiveSpeed(0.8);
-        //playerController.setFriction(0.3);
-        // playerController.setFriction(0.05);
-        updatables.add(playerController);
-        physicsWorld.add(playerController);
-        physicsWorld.add(new PhysicsRectangle(adventurer.getPos().getX(), adventurer.getPos().getY() - 100, 30, 30));
-        physicsWorld.add(new PhysicsRectangle(adventurer.getPos().getX() + 300, adventurer.getPos().getY() + 114 - 20, 200, 60).setFixed());
-        physicsWorld.add(new PhysicsRectangle(adventurer.getPos().getX() - 100, adventurer.getPos().getY() + 114, 50, 50).setFixed());
-        
-        // camera
-        camera.setScale(3);
-        camera.setSpeed(0.05);
-        camera.setTarget(adventurer);
-        camera.setPos(adventurer.getPos().copy().add(new Vector(0, -100)));
-        updatables.add(camera);
-
-
-        //physicsWorld.add(new Rectangle(adventurer.getPos().getX(), adventurer.getPos().getY() - 100, 30, 30));
-
-        
 
         final long startNanoTime = System.nanoTime();
 

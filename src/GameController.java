@@ -17,7 +17,7 @@ public class GameController implements Updatable {
     double alpha = 0;
     int delayCounterMax = 100;
     int delayCounter = -1;
-    int curentLevel = 1;
+    int currentLevel = 1;
 
     String newLevelName;
 
@@ -39,8 +39,8 @@ public class GameController implements Updatable {
 
         if (keyHandler.isPressed("U")) {
             fade = 1;
-            curentLevel = curentLevel%3 + 1;
-            newLevelName = "Level " + curentLevel;
+            currentLevel = currentLevel%3 + 1;
+            newLevelName = "Level " + currentLevel;
         }
 
         if (loweringCamera) {
@@ -62,17 +62,14 @@ public class GameController implements Updatable {
             gc.setTransform(1, 0, 0, 1, 0, 0);
             double width = gc.getCanvas().getWidth();
             double height = gc.getCanvas().getHeight();
-            alpha = alpha > 1 ? 1 : alpha;
-            alpha = alpha < 0 ? 0 : alpha;
+
+            alpha = Math.max(0, Math.min(1, alpha)); 
+
             gc.setFill(new Color(0, 0, 0, alpha));
             gc.fillRect(0, 0, width, height);
             
             if (delayCounter < 0) {
-                if (fade == 1)    
-                    alpha += .01;
-                else {
-                    alpha += -.01;
-                }
+                alpha += fade/100.0;
                 alpha = alpha > 1 ? 1 : alpha;
                 alpha = alpha < 0 ? 0 : alpha;
                 if (alpha == 1) {
@@ -87,7 +84,7 @@ public class GameController implements Updatable {
             } else {
                 delayCounter++;
                 if (delayCounter == delayCounterMax / 2)  {
-                    ArrayList<ParallaxSprite> backgrounds = (new SpriteLoader()).loadBackground(newLevelName);
+                    ArrayList<ParallaxSprite> backgrounds = SpriteLoader.loadEnvironment(newLevelName);
                     game.background = backgrounds.get(0);
                     game.foreground = backgrounds.get(1); 
                     game.foreground.setDepth(-1);
@@ -99,7 +96,7 @@ public class GameController implements Updatable {
     }
 
     public void changeLevels(String levelName) {
-        game.clearLevel();
+        game.initializeWorld();
 
         try {
             Object obj = parser.parse(new FileReader("config/levels.json"));
@@ -110,18 +107,21 @@ public class GameController implements Updatable {
                 String name = (String)k;
                 if (name.equals("mobs")) {
                     JSONObject mobs = (JSONObject)levelData.get(name);
+
                     for (Object v : mobs.keySet()) {
                         String mobName = (String)v;
                         JSONObject mobData = (JSONObject)mobs.get(mobName);
+
                         int numMob = ((Long) mobData.get("num")).intValue();
-                        Boolean flip = (Boolean) mobData.get("flip");
                         Boolean isBoss = (Boolean) mobData.get("isBoss");
+
                         for (int i = 0; i < numMob; i++) {
+
                             Sprite sprite = new SpriteLoader().loadAnimation(mobName);
-                            //sprite.setFlip((flip ? -1 : 1));
-                            sprite.setPos(100, 115);
+                            sprite.setPos(Math.random()*500 + (isBoss?400:0), 115);
+
                             MobController mob = new MobController(game, sprite, ((Long)mobData.get("health")).intValue());
-                            mob.setHostile(true);
+
                             if (isBoss) mob.setBoss();
                             mob.setMoveSpeed(((Double)mobData.get("speed")));
                             mob.setDmgFrames(

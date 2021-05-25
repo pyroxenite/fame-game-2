@@ -9,9 +9,9 @@ import org.json.simple.parser.*;
 
 public class SpriteLoader {
     
-    JSONParser parser = new JSONParser();
+    static JSONParser parser = new JSONParser();
 
-    public ArrayList<ParallaxSprite> loadBackground(String levelName) {
+    public static ArrayList<ParallaxSprite> loadEnvironment(String levelName) {
         ArrayList<ParallaxSprite> ret = new ArrayList<>();
         ArrayList<Image> backgroundImages = new ArrayList<>();
         ArrayList<Image> foregroundImages = new ArrayList<>();
