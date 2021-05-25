@@ -133,7 +133,6 @@ public class GameController implements Updatable {
 
                             Sprite sprite = SpriteLoader.loadAnimation(mobName);
                             sprite.setPos(new Vector(300 + Math.random()*500 + (isBoss?400:0), 115));
-                            System.out.println(((Long)mobData.get("yOffset")).intValue());
                             sprite.setOffset(((Long)mobData.get("yOffset")).intValue());
                             
                             MobController mob = new MobController(game, sprite, ((Long) mobData.get("health")).intValue());
@@ -152,7 +151,15 @@ public class GameController implements Updatable {
                 } else if (name.equals("platforms")) {
                     JSONObject platforms = (JSONObject)levelData.get("platforms");
                     for (Object p : platforms.keySet()) {
-                        System.out.println(p);
+                        JSONObject platformData = (JSONObject)platforms.get((String) p);
+                        var x = ((Long) platformData.get("x")).intValue();
+                        var y = ((Long) platformData.get("y")).intValue();
+                        var w = ((Long) platformData.get("w")).intValue();
+                        var h = ((Long) platformData.get("h")).intValue();
+                        var rect = new PhysicsRectangle(x, y, w, h);
+                        if ((Boolean) platformData.get("fixed"))
+                            rect.setFixed();
+                        game.getPhysicsWorld().add(rect);
                     }
                 }
             }   
