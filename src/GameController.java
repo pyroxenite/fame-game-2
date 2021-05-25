@@ -114,11 +114,15 @@ public class GameController implements Updatable {
                         String mobName = (String)v;
                         JSONObject mobData = (JSONObject)mobs.get(mobName);
                         int numMob = ((Long) mobData.get("num")).intValue();
+                        Boolean flip = (Boolean) mobData.get("flip");
+                        Boolean isBoss = (Boolean) mobData.get("isBoss");
                         for (int i = 0; i < numMob; i++) {
                             Sprite sprite = new SpriteLoader().loadAnimation(mobName);
-                            MobController mob = new MobController(game, sprite, ((Long)mobData.get("health")).intValue());
+                            sprite.setFlip((flip ? -1 : 1));
                             sprite.setPos(100, 115);
+                            MobController mob = new MobController(game, sprite, ((Long)mobData.get("health")).intValue());
                             mob.setHostile(true);
+                            if (isBoss) mob.setBoss();
                             mob.setMoveSpeed(((Double)mobData.get("speed")));
                             mob.setDmgFrames(
                                 ((Long)mobData.get("frameStart")).intValue(), 

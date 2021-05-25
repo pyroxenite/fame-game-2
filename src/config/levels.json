@@ -5,20 +5,24 @@
         "platforms": {},
         "mobs": {
             "skeleton": {
-                "num": 5,
-                "health": 50,
+                "num": 3,
+                "health": 3,
                 "damage": 1,
                 "speed": 0.6,
                 "frameStart": 6,
-                "frameEnd": 11
+                "frameEnd": 11,
+                "flip": false,
+                "isBoss": false
             },
-            "slime": {
-                "num": 5,
-                "health": 50,
-                "damage": 1,
-                "speed": 0.6,
+            "wizard": {
+                "num": 1,
+                "health": 10,
+                "damage": 2,
+                "speed": 0.3,
                 "frameStart": 3,
-                "frameEnd": 4
+                "frameEnd": 7,
+                "flip": false,
+                "isBoss": true
             }
         }
     },
@@ -26,12 +30,54 @@
         "biomeName": "mountain2",
         "yOffset": 133,
         "platforms": {},
-        "mobs": {}
+        "mobs": {
+            "slime": {
+                "num": 3,
+                "health": 2,
+                "damage": 1,
+                "speed": 0.6,
+                "frameStart": 3,
+                "frameEnd": 4,
+                "flip": true,
+                "isBoss": false
+            },
+            "demon": {
+                "num": 1,
+                "health": 10,
+                "damage": 1,
+                "speed": 0.6,
+                "frameStart": 6,
+                "frameEnd": 10,
+                "flip": true,
+                "isBoss": true
+            }
+        }
     },
     "Level 3": {
         "biomeName": "hills2",
         "yOffset": 225,
         "platforms": {},
-        "mobs": {}
+        "mobs": {
+            "soldier": {
+                "num": 3,
+                "health": 3,
+                "damage": 1,
+                "speed": 0.6,
+                "frameStart": 2,
+                "frameEnd": 4,
+                "flip": false,
+                "isBoss": false
+            },
+            "king": {
+                "num": 1,
+                "health": 10,
+                "damage": 2,
+                "speed": 0.3,
+                "frameStart": 2,
+                "frameEnd": 3,
+                "flip": false,
+                "isBoss": true
+            }
+        }
     }
 }

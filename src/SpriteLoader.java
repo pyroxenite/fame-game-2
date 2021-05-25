@@ -78,6 +78,7 @@ public class SpriteLoader {
                         ArrayList<Image> anim = new ArrayList<>();
                         
                         //get total num of images
+                        System.out.println(folderPath);
                         for (File img : folder.listFiles()) {
                             if (img.getName().startsWith(fileTemplate)) {
                                 images++;

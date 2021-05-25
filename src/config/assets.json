@@ -53,6 +53,36 @@
         "stagger": {
             "path": "images/mobs/skeleton/damage/damage",
             "delta": 0.1
+        },
+        "death": {
+            "path": "images/mobs/skeleton/death/death",
+            "delta": 0.2
+        }
+    },
+    "wizard" : {
+        "idle": {
+            "path": "images/mobs/wizard/idle/tile",
+            "delta": 0.2
+        },
+        "walk": {
+            "path": "images/mobs/wizard/walk/tile",
+            "delta": 0.25
+        },
+        "run": {
+            "path": "images/mobs/wizard/walk/tile",
+            "delta": 0.1
+        },
+        "attack": {
+            "path": "images/mobs/wizard/attack/tile",
+            "delta": 0.1
+        },
+        "stagger": {
+            "path": "images/mobs/wizard/stagger/tile",
+            "delta": 0.1
+        },
+        "death": {
+            "path": "images/mobs/wizard/death/tile",
+            "delta": 0.2
         }
     },
     "slime" : {
@@ -75,6 +105,88 @@
         "stagger": {
             "path": "images/mobs/slime/slime-hurt-",
             "delta": 0.1
+        },
+        "death": {
+            "path": "images/mobs/slime/slime-die-",
+            "delta": 0.2
+        }
+    },
+    "demon" : {
+        "idle": {
+            "path": "images/mobs/demon/idle/tile",
+            "delta": 0.2
+        },
+        "walk": {
+            "path": "images/mobs/demon/idle/tile",
+            "delta": 0.25
+        },
+        "run": {
+            "path": "images/mobs/demon/idle/tile",
+            "delta": 0.1
+        },
+        "attack": {
+            "path": "images/mobs/demon/attack/tile",
+            "delta": 0.1
+        },
+        "stagger": {
+            "path": "images/mobs/demon/stagger/tile",
+            "delta": 0.1
+        },
+        "death": {
+            "path": "images/mobs/demon/idle/tile",
+            "delta": 0.2
+        }
+    },
+    "king" : {
+        "idle": {
+            "path": "images/mobs/king/idle/tile",
+            "delta": 0.2
+        },
+        "walk": {
+            "path": "images/mobs/king/walk/tile",
+            "delta": 0.25
+        },
+        "run": {
+            "path": "images/mobs/king/walk/tile",
+            "delta": 0.1
+        },
+        "attack": {
+            "path": "images/mobs/king/attack/tile",
+            "delta": 0.15
+        },
+        "stagger": {
+            "path": "images/mobs/king/stagger/tile",
+            "delta": 0.1
+        },
+        "death": {
+            "path": "images/mobs/king/death/tile",
+            "delta": 0.2
+        }
+    },
+    "soldier" : {
+        "idle": {
+            "path": "images/mobs/soldier/idle/tile",
+            "delta": 0.2
+        },
+        "walk": {
+            "path": "images/mobs/soldier/walk/tile",
+            "delta": 0.25
+        },
+        "run": {
+            "path": "images/mobs/soldier/walk/tile",
+            "delta": 0.1
+        },
+        "attack": {
+            "path": "images/mobs/soldier/attack/tile",
+            "delta": 0.15
+        },
+        "stagger": {
+            "path": "images/mobs/soldier/stagger/tile",
+            "delta": 0.1
+        },
+        "death": {
+            "path": "images/mobs/soldier/death/tile",
+            "delta": 0.2
         }
     },
     "environment": {
